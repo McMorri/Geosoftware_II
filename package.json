@@ -1,0 +1,19 @@
+{
+  "name": "InteractivePapers",
+  "version": "1.0.0",
+  "description": "Geosoftware2 InteractivePapers",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Timon Gottschlich, Moritz Migge, Marvin Gehrt, Tobias Steinblum, Daniel Schäperklaus",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3",
+    "js-logger": "^1.1.1",
+    "mongo": "^0.1.0",
+    "mongoose": "^4.1.6",
+    "mongoose-geojson-schema": "0.0.2",
+    "body-parser": "~1.13.3"
+}
