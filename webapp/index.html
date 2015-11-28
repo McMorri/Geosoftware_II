@@ -50,6 +50,23 @@
 						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> InteractivePapers</a>
 					</li>
 				</ul>
+
+
+				<ul id="option" class="nav navbar-nav">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Options <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#"  onclick="download()"> Download </li>
+							<li><a href="#"  onclick="newPub()"> New publication </li>
+						</ul>
+					</li>
+				</ul>
+				
+
+
+
+	    		
+
 				
 				<ul class="nav navbar-nav navbar-right">	
 					<li><a href="impressum.html">
@@ -70,18 +87,20 @@
 	    		</div>
 	    	</div>
 
-	    	<!-- Button und Liste -->
+	    	<!-- Liste -->
 	    	<div class="col-md-4">
-	    		<p>Paper-Upload:</p>
-	    		<!-- Hier Button zum Hochladen der Paper einfügen-->
-	    		<input class="btn btn-default" type='file' accept='text/plain' onchange='ReadPolyline(event)'><br>
+
 	    		<p>Paper-List:</p>
 	    		<!-- Hier List-Element für die Publikationsliste einfügen-->
+	    		<ul id="publicationlist">
+					<li>...</li>
+				</ul>
 	    	</div>
     	</div>
 
 
-    	<script type="text/javascript" src="bla.js"></script> 
+    	<script type="text/javascript" src="js/bla.js"></script> 
+    	<script type="text/javascript" src="js/bootbox.js"></script> 
 
 	</body>
 
