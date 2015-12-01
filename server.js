@@ -18,6 +18,66 @@ app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable proce
 
 
 
+
+
+
+
+
+
+
+var publicationSchema = mongoose.Schema({
+  pubid: String,
+  token; String,
+  pubname: String,
+  authorname: [String],
+  releasedate:	Date
+});
+
+var publication = mongoose.model('publication', publicationSchema);
+
+
+app.post("/savepub", function(req,res){
+	
+	
+	
+	var temppub = new publication({			
+		pubid: ,
+		token: ,
+		pubname: ,
+		authorname: ,
+		releasedate: 
+	});
+	
+	temppub.save(function (err, savedpub) {
+				if (err){
+					res.send("Error: "+err); 
+				}
+				res.send(savedpub);
+			});
+  
+	
+});
+
+
+app.get("/getpub", function (req,res){
+	
+	
+	//...umändern
+	publication.find ({ abschnittID: req.body.abschnittID }).exec (function (err, routes) {
+							return res.send(routes);	//Send Response with a Array full of routes.
+	});
+	
+});
+
+
+
+
+
+
+
+
+
+
 /* init database connection */
 mongoose.connect('mongodb://localhost:' + config.mongoPort + '/Abschlussaufgabe');
 var database = mongoose.connection;
