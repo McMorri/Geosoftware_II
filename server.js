@@ -19,12 +19,6 @@ app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable proce
 
 
 
-
-
-
-
-
-
 var publicationSchema = mongoose.Schema({
   pubid: String,
   token; String,
