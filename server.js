@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable proce
 
 var publicationSchema = mongoose.Schema({
   pubid: String,
-  token; String,
+  token: String,
   pubname: String,
   authorname: [String],
   releasedate:	Date
@@ -34,13 +34,13 @@ app.post("/savepub", function(req,res){
 	
 	
 	
-	var temppub = new publication({			
+	/*var temppub = new publication({			
 		pubid: ,
 		token: ,
 		pubname: ,
 		authorname: ,
 		releasedate: 
-	});
+	});*/
 	
 	temppub.save(function (err, savedpub) {
 				if (err){

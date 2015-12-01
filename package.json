@@ -17,3 +17,4 @@
     "mongoose-geojson-schema": "0.0.2",
     "body-parser": "~1.13.3"
 }
+}
