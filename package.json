@@ -11,10 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.3",
-    "js-logger": "^1.1.1",
-    "mongo": "^0.1.0",
-    "mongoose": "^4.1.6",
+    "js-logger": "^1.2.0",
+    "mongo": "^3.0.0",
+    "mongoose": "^4.2.9",
     "mongoose-geojson-schema": "0.0.2",
-    "body-parser": "~1.13.3"
+    "body-parser": "~1.14.1"
+    
 }
 }
