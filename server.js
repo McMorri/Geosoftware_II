@@ -34,6 +34,7 @@ app.post("/savepub", function(req,res){
 	
 	
 	
+
 	var temppub = new publication({			
 		pubid: req.body.pubid,
 		token: req.body.token,
@@ -41,6 +42,7 @@ app.post("/savepub", function(req,res){
 		authorname: req.body.authorname,
 		releasedate: req.body.releasedate
 	});
+
 	
 	temppub.save(function (err, savedpub) {
 				if (err){
