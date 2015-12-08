@@ -39,8 +39,13 @@ function download() {
 
 $.ajax({
     type: 'POST',
-    dataType: 'tex',
-    url: 'http://' + window.location.host + '/download',
+    dataType: '*.tex',
+    data: {pubid: "",
+    token:"",
+    pubname:"",
+    authorname:[],
+    releasedate:""},
+    url: 'http://' + window.location.host + '/savepub',
     timeout: 5000,
     success: function(content, textStatus ){
        //...
@@ -60,13 +65,8 @@ function newPub() {
         message: '<div class="input-group"><span class="input-group-addon" id="sizing-addon2">Publicationname</span><input id="pubname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2"></div>'
                     + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Authorname(s)</span><input id="authorname" type="text" class="form-control daypicker" placeholder="..." aria-describedby="sizing-addon2"></div>'
                     + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Releasedate of the publication</span><input id="releasedate" type="text" class="form-control daypicker" placeholder="Form: YYYY-MM-DD" aria-describedby="sizing-addon2"></div>'
-<<<<<<< HEAD
                     + '<br> <div> <input type="file" accept=".tex" class="btn btn-default" onchange="Readdata(event)"> </div>',
                     
-=======
-                    + '<br> <div> <input type="file" accept="*.latex" class="btn btn-default" onchange="Readdata(event) id="newPub"> </div>',
-                    // '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Upload</span><input type='file' accept='tex' aria-describedby="sizing-addon2"></div>',
->>>>>>> origin/master
 
 	    		
         onEscape: function() {},
