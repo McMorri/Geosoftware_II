@@ -1,6 +1,6 @@
 /**
 *   @author     Moritz Migge, Timon Gottschlich, Marvin Gehrt, Tobias Steinblum, Daniel Schäperklaus
-*   @version	1.0 
+*   @version    1.0 
 */
 
 "use strict";
@@ -12,22 +12,22 @@ var consoleAppender = JL.createConsoleAppender('consoleAppender');
 JL().setOptions({"appenders": [consoleAppender]});
 
 function Readdata(event) {
-	
-	// Init
-	var input = event.target;
+    
+    // Init
+    var input = event.target;
     var reader = new FileReader();
-	
-	/**
-	* @desc Invoked when file is loading. 
-	*/ 
+    
+    /**
+    * @desc Invoked when file is loading. 
+    */ 
     reader.onload = function(){
-		// logging message per jsnlog, to make sure that the file was loaded successfully
+        // logging message per jsnlog, to make sure that the file was loaded successfully
         JL("file loaded").info("the file was successfully loaded");
-		var filecontent=reader.result;
-        	
-		// Read the file
-		reader.readAsText(input.files[0]);
-		//...
+        var filecontent=reader.result;
+            
+        // Read the file
+        reader.readAsText(input.files[0]);
+        //...
 };
 };
 
@@ -37,26 +37,33 @@ function download() {
 }
 
 
+function speichern(pubname,authorname,releasedate){
 $.ajax({
     type: 'POST',
-    dataType: '*.tex',
-    data: {pubid: "",
-    token:"",
-    pubname:"",
-    authorname:[],
-    releasedate:""},
+    data: {
+        pubname:pubname,
+        authorname:authorname,
+        releasedate:releasedate
+    },
     url: 'http://' + window.location.host + '/savepub',
     timeout: 5000,
     success: function(content, textStatus ){
-       //...
-     console.log('publication downloaded!');
-        
-
+       $("#publicationlist").append('<tr><td><button data-index="' + content._pubname + '" onclick="loadpub(this)" class="btn btn-default">'
+                        + content.pubname + '</button> <br></td></tr>');
+     console.log('publication saved to db!');
     },
     error: function(xhr, textStatus, errorThrown){
-        console.error('publicationdownload error!');
+        console.error('publication save failed!');
     }
 });
+}
+
+
+
+function getHash(){
+    return window.location.hash.slice(1);
+}
+
 
 
 function newPub() {
@@ -65,14 +72,14 @@ function newPub() {
         message: '<div class="input-group"><span class="input-group-addon" id="sizing-addon2">Publicationname</span><input id="pubname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2"></div>'
                     + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Authorname(s)</span><input id="authorname" type="text" class="form-control daypicker" placeholder="..." aria-describedby="sizing-addon2"></div>'
                     + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Releasedate of the publication</span><input id="releasedate" type="text" class="form-control daypicker" placeholder="Form: YYYY-MM-DD" aria-describedby="sizing-addon2"></div>'
-                    + '<br> <div> <input type="file" accept=".tex" class="btn btn-default" onchange="Readdata(event)"> </div>',
-	    		
+                    + '<br> <div> <input type="file" accept="txt" class="btn btn-default" onchange="Readdata(event)"> </div>',
+                
         onEscape: function() {},
         buttons: {
-            "Let's Go": {         
+            "Lets Go": {         
                 callback: function(){
-                    //...
-                     //$("#publicationlist").append('<tr><td><button data-index="' + (index+1) + '" onclick="loadpub(this)" class="btn btn-default">''</button> <br></td></tr>');
+
+                     speichern($("#pubname").val(),$("#authorname").val(),$("#releasedate").val());
                 }
             }
         }

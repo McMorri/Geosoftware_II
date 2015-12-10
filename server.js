@@ -20,62 +20,18 @@ app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable proce
 
 
 var publicationSchema = mongoose.Schema({
-  pubid: String,
-  token: String,
+  //pubid: String, do we really need that?
+  //token: String,
   pubname: String,
   authorname: [String],
   releasedate:	Date
 });
 
+
 var publication = mongoose.model('publication', publicationSchema);
 
-
-app.post("/savepub", function(req,res){
-	
-	
-	
-
-	var temppub = new publication({			
-		pubid: req.body.pubid,
-		token: req.body.token,
-		pubname: req.body.pubname,
-		authorname: req.body.authorname,
-		releasedate: req.body.releasedate
-	});
-
-	
-	temppub.save(function (err, savedpub) {
-				if (err){
-					res.send("Error: "+err); 
-				}
-				res.send(savedpub);
-			});
-  
-	
-});
-
-
-app.get("/getpub", function (req,res){
-	
-	
-	//...umändern
-	publication.find ({ abschnittID: req.body.abschnittID }).exec (function (err, routes) {
-							return res.send(routes);	//Send Response with a Array full of routes.
-	});
-	
-});
-
-
-
-
-
-
-
-
-
-
 /* init database connection */
-mongoose.connect('mongodb://localhost:' + config.mongoPort + '/Abschlussaufgabe');
+mongoose.connect('mongodb://localhost:' + config.mongoPort + '/PaperBulb');
 var database = mongoose.connection;
 
 database.on('error', console.error.bind(console, 'ABORTING. database connection error:'));
@@ -102,3 +58,55 @@ app.use(function(req, res, next) {
 
 // deliver all contents of the folder '/webapp' under '/'
 app.use(express.static(__dirname + '/webapp'));
+
+
+
+
+
+
+
+
+
+app.get("/getpub", function (req,res){
+	
+	
+	//...umändern
+	publication.find(function (err, feature) {
+		if(err){
+			return console.log(err);
+		}
+		return console.log(res.send(feature));
+	});
+	
+});
+
+
+app.post("/savepub", function(req,res){
+	
+	console.log("req.body");
+	
+
+	var temppub = new publication({			
+		//pubid: req.body.pubid,
+		//token: req.body.token,
+		pubname: req.body.pubname,
+		authorname: req.body.authorname,
+		releasedate: req.body.releasedate
+	});
+
+	
+
+	temppub.save(function (err) {
+				if (err){
+					res.send("Error: "+err); 
+				}
+				console.log("hallo");
+				res.send(temppub);
+			});	
+});
+
+
+
+
+
+
