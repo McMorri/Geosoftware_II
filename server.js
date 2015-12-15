@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable proce
 
 
 var publicationSchema = mongoose.Schema({
-  //pubid: String, do we really need that?
+  //pubid: String, 
   //token: String,
   pubname: String,
   authorname: [String],
@@ -28,7 +28,13 @@ var publicationSchema = mongoose.Schema({
 });
 
 
-var publication = mongoose.model('publication', publicationSchema);
+var publication = mongoose.model('publication' , publicationSchema);
+
+
+
+
+
+
 
 /* init database connection */
 mongoose.connect('mongodb://localhost:' + config.mongoPort + '/PaperBulb');
@@ -60,21 +66,22 @@ app.use(function(req, res, next) {
 app.use(express.static(__dirname + '/webapp'));
 
 
-
-
-
-
+app.get("/getselectedpub", function (req,res){
+	console.log("funktioniert nicht");
+	//publication.find????????
+});
 
 
 
 app.get("/getpub", function (req,res){
 	
-	
-	//...umändern
+	console.log("2");
 	publication.find(function (err, feature) {
 		if(err){
+
 			return console.log(err);
 		}
+		console.log(feature);
 		return console.log(res.send(feature));
 	});
 	
