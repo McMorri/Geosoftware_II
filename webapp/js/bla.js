@@ -27,7 +27,7 @@ $.ajax({
             
             for (var i = 0; i < content.length; i++) {
                 $("#publicationlist").prepend('<tr><td><button data-index="' + (i+1) + '"onclick="loadPublication(this)" class="btn btn-default">' 
-                    + content[i].pubname + " : " + content[i].authorname + " : " + content[i].releasedate + '</button> <br></td></tr>');
+                    + content[i].pubname + " : " + content[i].authorname + " : " + content[i].releasedate.substring(0,10) + '</button> <br></td></tr>');
             }
 
             if (!window.location.hash) {
@@ -92,7 +92,7 @@ $.ajax({
     success: function(content, textStatus ){
         console.log(content.pubname);
        $("#publicationlist").prepend('<tr><td><button data-index="' + content.pubname + '" onclick="loadPublication(this)" class="btn btn-default">'
-                        + content.pubname + '</button> <br></td></tr>');
+                        + content.pubname + " : " + content.authorname + " : " + content.releasedate.substring(0,10) +'</button> <br></td></tr>');
      console.log('publication saved to db!');
     },
     error: function(xhr, textStatus, errorThrown){
@@ -142,32 +142,25 @@ function newPub() {
 
 
 function loadPublication(index){
-console.log("logger showPublication");
+
+    console.log("logger showPublication");
 
 
-$.ajax({
-    type: 'GET',
-    //dataType: 'txt',
-    url: 'http://' + window.location.host + '/getselectedpub',
-    timeout: 5000,
-    success: function(content, textStatus ){
-        console.log(content);
-    },
-    error: function(xhr, textStatus, errorThrown){
-        console.error('publication couldnt be selected :^(');
-    }
+    $.ajax({
+        type: 'GET',
+        //dataType: 'txt',
+        url: 'http://' + window.location.host + '/getselectedpub',
+        timeout: 5000,
+        success: function(content, textStatus ){
+            console.log(content);
+        },
+        error: function(xhr, textStatus, errorThrown){
+            console.error('publication couldnt be selected :^(');
+        }
 });
 
+    var publication = pubarray[index];
 
-
-
-var publication = pubarray[index];
-
-
-/*$('#pubnameid').val(publication.pubname);
-    var random = Math.random();
-    console.log(random);
-    console.log(pubname + "loaded");*/
 }
 
 
