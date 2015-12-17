@@ -31,9 +31,7 @@ var publicationSchema = mongoose.Schema({
 var publication = mongoose.model('publication' , publicationSchema);
 
 
-
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /* init database connection */
@@ -44,7 +42,6 @@ database.on('error', console.error.bind(console, 'ABORTING. database connection 
 
 // once db connection is open, start http server
 database.once('open', function (callback) {
-    
     console.log('connection to database established on port ' + config.mongoPort);
     app.listen(config.httpPort, function(){
         console.log('http server now running on port ' + config.httpPort);
@@ -66,32 +63,26 @@ app.use(function(req, res, next) {
 app.use(express.static(__dirname + '/webapp'));
 
 
-app.get("/getselectedpub", function (req,res){
-	console.log("funktioniert nicht");
-	//publication.find????????
-});
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 app.get("/getpub", function (req,res){
-	
-	console.log("2");
+	console.log("getpub is starting fine");
+
 	publication.find(function (err, feature) {
 		if(err){
-
 			return console.log(err);
 		}
+
 		console.log(feature);
 		return console.log(res.send(feature));
 	});
-	
 });
 
 
 app.post("/savepub", function(req,res){
-	
-	console.log("req.body");
-	
+	console.log("save pub is starting fine");
 
 	var temppub = new publication({			
 		//pubid: req.body.pubid,
@@ -101,15 +92,21 @@ app.post("/savepub", function(req,res){
 		releasedate: req.body.releasedate
 	});
 
-	
 
 	temppub.save(function (err) {
-				if (err){
-					res.send("Error: "+err); 
-				}
-				console.log("hallo");
-				res.send(temppub);
-			});	
+		if (err){
+			res.send("Error: "+err); 
+		}
+
+		console.log("tempub was saved ");
+		res.send(temppub);
+	});	
+});
+
+
+
+app.get("/getselectedpub", function (req,res){
+	//publication.find????????
 });
 
 
