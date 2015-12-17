@@ -106,11 +106,19 @@ app.post("/savepub", function(req,res){
 
 
 app.get("/getselectedpub", function (req,res){
-	//publication.find????????
+
+	publication.find({_id: req.body._id},function (err, feature) {
+		console.log(req.body._id);
+		if(err){
+			return console.log(err);
+		}
+		console.log(feature);
+		return res.send(feature);
+	});	
 });
 
 
-
+//Kitten.find({ name: /^Fluff/ }, callback);
 
 
 

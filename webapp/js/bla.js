@@ -23,7 +23,7 @@ $.ajax({
     timeout: 5000,
     success: function(content, textStatus ){
         if (content.length != 0) {
-            
+
             for (var i = 0; i < content.length; i++) {
                 $("#publicationlist").prepend('<tr><td><button data-index="' + (i+1) + '"onclick="loadPublication(this)" class="btn btn-default">' 
                     + content[i].pubname + " : " + content[i].authorname + " : " + content[i].releasedate.substring(0,10) + '</button> <br></td></tr>');
@@ -31,11 +31,12 @@ $.ajax({
 
             if (!window.location.hash) {
                 window.location.hash = '#0';
+                console.log('No Publications loaded');
             } else {
                 loadPublication(getHash());
+                console.log('Specific Publications loaded');
             }
 
-            console.log('Publications loaded');
         } else {
             console.log('No publication saved');
         }
@@ -67,7 +68,7 @@ function newPublication() {
         title: "Please enter details for your publication!",
         message: '<div class="input-group"><span class="input-group-addon" id="sizing-addon2">Publicationname</span><input id="pubname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2"></div>'
                     + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Authorname(s)</span><input id="authorname" type="text" class="form-control daypicker" placeholder="..." aria-describedby="sizing-addon2"></div>'
-                    + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Releasedate of the publication</span><input id="releasedate" type="text" class="form-control daypicker" placeholder="Form: YYYY-MM-DD" aria-describedby="sizing-addon2"></div>'
+                    + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Releasedate of the publication</span><input id="releasedate" value="2015-09-07" type="text" class="form-control daypicker" placeholder="Form: YYYY-MM-DD" aria-describedby="sizing-addon2"></div>'
                     + '<br> <div> <input type="file" accept="*.tex" class="btn btn-default" onchange="Readdata(event)"> </div>',
                 
         onEscape: function() {},
@@ -79,10 +80,9 @@ function newPublication() {
                         authorname: $('#authorname').val(),
                         releasedate: $('#releasedate').val(),
                     });
-                    var index = publicationArray.length-1;
-                    console.log(index);
+
+
                     savePublication($("#pubname").val(),$("#authorname").val(),$("#releasedate").val());
-                    window.location.hash= '#'+ index;
                 }
             }
         }
@@ -103,10 +103,12 @@ function savePublication(pubname,authorname,releasedate){
         timeout: 5000,
 
         success: function(content, textStatus ){
-            console.log(content.pubname);
-           $("#publicationlist").prepend('<tr><td><button data-index="' + content.pubname + '" onclick="loadPublication(this)" class="btn btn-default">'
-                            + content.pubname + " : " + content.authorname + " : " + content.releasedate.substring(0,10) +'</button> <br></td></tr>');
-         console.log('publication saved to db!');
+            window.location.hash = '#' + content._id;
+            
+            $("#publicationlist").prepend('<tr><td><button data-index="' + ($("#publicationlist").length+1) + '" onclick="loadPublication(this)" class="btn btn-default">'
+                                + content.pubname + " : " + content.authorname + " : " + content.releasedate.substring(0,10) +'</button> <br></td></tr>');
+
+             console.log('publication saved to db!');
         },
 
         error: function(xhr, textStatus, errorThrown){
@@ -118,7 +120,7 @@ function savePublication(pubname,authorname,releasedate){
 
 function loadPublication(index){
 
-    console.log("logger showPublication");
+    console.log("logger loadPublication");
 
 
     $.ajax({
@@ -127,14 +129,15 @@ function loadPublication(index){
         url: 'http://' + window.location.host + '/getselectedpub',
         timeout: 5000,
         success: function(content, textStatus ){
-            console.log(content);
+            console.log("load pub does work")
+            console.log(window.location.hash);
+            window.location.hash = '#' + content._id;
         },
         error: function(xhr, textStatus, errorThrown){
             console.error('publication couldnt be selected :^(');
         }
-});
+    });
 
-    var publication = publicationArray[index];
 
 }
 
