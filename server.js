@@ -84,8 +84,12 @@ app.get("/getpub", function (req,res){
 });
 
 
-app.post("/savepub", function(req,res){
+// TODO: multer instanz erzeugen
+
+app.post("/savepub", /* multer instanz, */ function(req,res){
 	console.log("save pub is starting fine");
+
+	//var texFile = req.files['texFile'][0];
 
 	var temppub = new publication({			
 		//pubid: req.body.pubid,
@@ -111,10 +115,10 @@ app.post("/savepub", function(req,res){
 
 
 
-app.get("/getselectedpub", function (req,res){
+app.get("/getselectedpub/:id", function (req,res){
 
-	publication.find({_id: req.body._id},function (err, feature) {
-		console.log(req.body._id);
+	publication.findOne({_id: req.params.id}, function (err, feature) {
+		console.log(req.params.id);
 		if(err){
 			return console.log(err);
 		}
@@ -124,4 +128,8 @@ app.get("/getselectedpub", function (req,res){
 });
 
 
-//Kitten.find({ name: /^Fluff/ }, callback);
+app.get("/download/:id", function (req,res){
+
+});
+
+

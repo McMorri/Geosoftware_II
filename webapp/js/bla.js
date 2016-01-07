@@ -5,122 +5,101 @@
 
 "use strict";
 
-
+var selectedPaperID;
 var publicationArray = [];
-var paperID = window.location.search.slice(4);
 
-/**
-*   settings to send the jsnlog-messages to the console of the browser
-*/
-var consoleAppender = JL.createConsoleAppender('consoleAppender');
-JL().setOptions({"appenders": [consoleAppender]});
+$(document).ready(function() {
 
-
-
-$.ajax({
-    type: 'GET',
-    //dataType: 'txt',
-    url: 'http://' + window.location.host + '/getpub',
-    timeout: 5000,
-    success: function(content, textStatus ){
-        if (content.length != 0) {
-
-            for (var i = 0; i < content.length; i++) {
-                $("#publicationlist").prepend('<tr><td><button data-index="' + (i+1) + '"onclick="loadPublication(this)" class="btn btn-default">' 
-                    + content[i].pubname + " : " + content[i].authorname + " : " + content[i].releasedate + '</button> <br></td></tr>');
-            }
-
-            if (!window.location.hash) {
-                window.location.hash = '#0';
-                console.log('No specific publication loaded');
-            } else {
-                loadPublication(getHash());
-                console.log('Specific publication loaded');
-            }
-
-        } else {
-            console.log('No publications saved');
-        }
-
-    },
-    error: function(xhr, textStatus, errorThrown){
-        console.error('publication couldnt be loaded :^(');
+    // get pubID from url hash
+    selectedPaperID = window.location.hash.slice(1);
+    if (selectedPaperID) {
+        loadPublication(selectedPaperID);
     }
-});
+
+    /**
+    *   settings to send the jsnlog-messages to the console of the browser
+    */
+    var consoleAppender = JL.createConsoleAppender('consoleAppender');
+    JL().setOptions({"appenders": [consoleAppender]});
+
+
+
+    $.ajax({
+        type: 'GET',
+        //dataType: 'txt',
+        url: 'http://' + window.location.host + '/getpub',
+        timeout: 5000,
+        success: function(content, textStatus ){
+            if (content.length != 0) {
+
+                for (var i = 0; i < content.length; i++) {
+                    $("#publicationlist").prepend('<tr><td><button data-index="' + content[i]._id + '"onclick="loadPublication(this)" class="btn btn-default">' 
+                        + content[i].pubname + " : " + content[i].authorname + " : " + content[i].releasedate + '</button> <br></td></tr>');
+                }
+
+                if (!selectedPaperID) {
+                    console.error('No specific publication loaded');
+                } else {
+                    loadPublication(selectedPaperID);
+                    console.log('Specific publication loaded');
+                }
+
+            } else {
+                console.error('No publications saved');
+            }
+
+        },
+        error: function(xhr, textStatus, errorThrown){
+            console.error('publication couldnt be loaded :^(');
+        }
+    });
+
+    $('#newPubForm').submit(function(e) {
+        e.preventDefault(); // avoid autmatic form submission
+        $.ajax({
+            url: $("#newPubForm").attr("action"),
+            type: 'POST',
+            data: $("#newPubForm").serialize(),
+            success: function(content) {
+                // add button to right sidebar
+                $("#publicationlist").prepend('<tr><td><button data-index="' + content._id + '" onclick="loadPublication(this)" class="btn btn-default">'
+                   + content.pubname + " : " + content.authorname + " : " + content.releasedate +'</button> <br></td></tr>');
+                $("#selectedpubname").text(content.pubname);
+                console.log('publication saved to db!');
+                //selectedPaperID = content._id;
+                window.location.hash = '#close';
+                window.location.hash = '#' + content._id;
+
+            }
+
+        });
+    });
+}); // end document.ready()
 
 
 function downloadPaper() {
-    var url= 'http://' + window.location.host + '/download?id=';
-    window.open(url + paperID);
-}
-
-function getHash(){
-    return window.location.hash.slice(1);
+    var url= 'http://' + window.location.host + '/download/';
+    window.open(url + selectedPaperID);
 }
 
 window.onHashChange=function(){
     var hash = window.location.hash.slice(1);
-    if (hash) loadPublication(getHash());
+    if (hash != '#newPubModal' && hash != '#close' && hash != '') {
+        loadPublication(hash);
+    }
 }
 
 
+// accapts a button from the right sidebar or a string containing th ID
+function loadPublication(element){
 
-function newPublication() {
-    bootbox.dialog({
-        title: "Please enter details for your publication!",
-        message: '<div class="input-group"><span class="input-group-addon" id="sizing-addon2">Publicationname</span><input id="pubname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2"></div>'
-                    + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Authorname(s)</span><input id="authorname" type="text" class="form-control daypicker" placeholder="..." aria-describedby="sizing-addon2"></div>'
-                    //+ '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Releasedate of the publication</span><input id="releasedate" value="2015-09-07" type="text" class="form-control daypicker" placeholder="Form: YYYY-MM-DD" aria-describedby="sizing-addon2"></div>'
-                    + '<br> <div> <input type="file" accept="*.tex" class="btn btn-default" onchange="Readdata(event)"> </div>',
-                
-        onEscape: function() {},
-        buttons: {
-            "Lets Go": {         
-                callback: function(){
-                    publicationArray.push({
-                        pubname: $('#pubname').val(),
-                        authorname: $('#authorname').val(),
-                        releasedate: $('#releasedate').val(),
-                    });
-
-
-                    savePublication($("#pubname").val(),$("#authorname").val(),$("#releasedate").val());
-                }
-            }
-        }
-    });
-}
-
-
-
-function savePublication(pubname,authorname,releasedate){
-    $.ajax({
-        type: 'POST',
-        data: {
-            pubname:pubname,
-            authorname:authorname,
-            releasedate:releasedate
-        },
-        url: 'http://' + window.location.host + '/savepub',
-        timeout: 5000,
-
-        success: function(content, textStatus ){
-            window.location.hash = '#' + content._id;
-            
-            $("#publicationlist").prepend('<tr><td><button data-index="' + ($("#publicationlist").length+1) + '" onclick="loadPublication(this)" class="btn btn-default">'
-                                + content.pubname + " : " + content.authorname + " : " + content.releasedate +'</button> <br></td></tr>');
-
-             console.log('publication saved to db!');
-        },
-
-        error: function(xhr, textStatus, errorThrown){
-            console.error('publication save failed!');
-        }
-    });
-}
-
-
-function loadPublication(index){
+    var pubID;
+    if (typeof element == "string") {
+        pubID = element;
+    } else {
+        // ITS A BUTTON!
+        pubID = $(element).data('index');
+    }
 
     console.log("logger loadPublication");
 
@@ -128,16 +107,16 @@ function loadPublication(index){
     $.ajax({
         type: 'GET',
         //dataType: 'txt',
-        url: 'http://' + window.location.host + '/getselectedpub' + paperID,
+        url: 'http://' + window.location.host + '/getselectedpub/' + pubID,
         timeout: 5000,
         success: function(content, textStatus ){
 
-            $("#selectedpubname").append(content.pubname); // gleiches Problem: wie an einzelne publikation kommen um den namen ins feld zu schreiben???
+            $("#selectedpubname").text(content.pubname);
             
-            console.log("load pub does work");
-            console.log(content); // Problem: gibt Array aus. Wie an einzelne Publikation kommen??? 
             window.location.hash = '#' + content._id;
             console.log(content._id);
+
+            selectedPaperID = content._id;
             
         },
         error: function(xhr, textStatus, errorThrown){

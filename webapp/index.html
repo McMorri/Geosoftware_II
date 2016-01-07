@@ -15,17 +15,16 @@
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="app/components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="app/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="app/components/leaflet/dist/leaflet.js"></script>
     <script type="text/javascript" src="app/components/leaflet-dist/leaflet.js"></script>
     <script type="text/javascript" src="app/components/leaflet-draw/dist/leaflet.draw.js"></script>
     <script type="text/javascript" src="app/components/jsnlog.js/jsnlog.min.js"></script>
     <script type="text/javascript" src="app/components/bootbox.js/bootbox.js"></script>
     <script type="text/javascript" src="js/bla.js"></script> 
+    <script type="text/javascript" src="js/Leaflet.js"></script> 
     
 
 
     <link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="app/components/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="app/components/leaflet-dist/leaflet.css" />
     <link rel="stylesheet" href="app/components/leaflet-draw/dist/leaflet.draw.css" />
 
@@ -61,7 +60,7 @@
 								<ul class="dropdown-menu">
 									<li><a href="#" onclick="downloadPaper()">Download</a></li>
 									<li role="separator"  class="divider"></li>
-									<li><a href="#" onclick="newPublication()">New Publication</a></li>
+									<li><a href="#newPubModal">New Publication</a></li>
 								</ul>
 							</li>
 
@@ -72,8 +71,36 @@
 				     	</ul>
 				    </div>				
 				</div><!-- /.container-fluid -->
-			</nav>
+			</nav><!--navbar navbar-default-->
 		</div>  
+
+		<div id="newPubModal" class="modalDialog">
+		    <div>
+		        <h4>New Publication</h4>
+		        <p><b>Please enter details for your publication!</b></p>
+		        <form id="newPubForm" class="input-group" method="POST" enctype="multipart/form-data" action="/savepub">
+		            <b>Add the metadata:</b><br><br>
+		            <table class="inputTable">
+		                <tr>
+		                    <td class="inputTable">Publication Name:</td>
+		                    <td class="inputTable"><input id="title" name="pubname" type="text" size="45"/></td>
+		                </tr>
+		                <tr>
+		                    <td class="inputTable">Author Name:</td>
+		                    <td class="inputTable"><input id="authorname" name="authorname" type="text" size="45"/></td>
+		                </tr>
+		            </table>
+		            <table class="inputTable">
+		                <tr>
+		                    <td class="inputTable">TeX file: </td>
+		                    <td class="inputTable"><input id="texFile" name="texFile" type="file" accept=".tex" /></td>
+		                </tr>
+		            </table>
+		            <a href="#close" title="Cancel" class="btn cancel" style="background-color: white">Cancel</a>
+		            <input class="btn" type="submit" value="Upload" style="float:right"/>
+		        </form>
+		    </div>
+		</div>
 
 		<div class="row">
       	<!-- Vorschau des Papers -->
@@ -83,6 +110,9 @@
 	    			<p id="selectedpubname"></p>
 	    			<textarea readonly id="pubnameid" type="text" placeholder="publicationname here" class="form-control"> </textarea readonly> 
 	    			<!-- Hier Vorschaufeld für die Paper einfügen--> 
+
+					<div id="leafletBox" style="height: 500px"></div>
+
 	    		</div>
 	    	</div>
 
