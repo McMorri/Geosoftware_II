@@ -2,7 +2,7 @@
   "name": "PaperBulb",
   "version": "1.0.0",
   "description": "Geosoftware2 project PaperBulb",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -12,10 +12,18 @@
   "dependencies": {
     "express": "^4.13.3",
     "js-logger": "^1.2.0",
-    "mongo": "^3.0.0",
+    "fs-extra": "^0.26.2",
+    "multer": "^1.1.0",
+    "mongo": "^0.1.0",
     "mongoose": "^4.2.9",
     "mongoose-geojson-schema": "0.0.2",
     "body-parser": "~1.14.1"
-    
-}
+  },
+  "devDependencies": {
+    "bower": "^1.6.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/McMorri/Geosoftware_II.git"
+  }
 }

@@ -3,21 +3,17 @@
 
 "use strict";
 
-// change these, if you need another port config
-var config = {
-    httpPort: 8080,
-    mongoPort: 27017
-}
-
 var express    = require('express');
 var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
+var fse 	   = require('fs-extra');
+var multer 	   = require('multer');
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable processing of the received post content
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var publicationSchema = mongoose.Schema({
   //pubid: String, 
@@ -32,6 +28,13 @@ var publication = mongoose.model('publication' , publicationSchema);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// change these, if you need another port config
+var config = {
+    httpPort: 8080,
+    mongoPort: 27017
+}
 
 
 /* init database connection */
@@ -89,8 +92,11 @@ app.post("/savepub", function(req,res){
 		//token: req.body.token,
 		pubname: req.body.pubname,
 		authorname: req.body.authorname,
-		releasedate: req.body.releasedate
+		//releasedate: req.body.releasedate
+		releasedate: new Date()
 	});
+
+	var paperID = temppub._id;
 
 
 	temppub.save(function (err) {
@@ -119,6 +125,3 @@ app.get("/getselectedpub", function (req,res){
 
 
 //Kitten.find({ name: /^Fluff/ }, callback);
-
-
-

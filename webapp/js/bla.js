@@ -7,6 +7,7 @@
 
 
 var publicationArray = [];
+var paperID = window.location.search.slice(4);
 
 /**
 *   settings to send the jsnlog-messages to the console of the browser
@@ -26,19 +27,19 @@ $.ajax({
 
             for (var i = 0; i < content.length; i++) {
                 $("#publicationlist").prepend('<tr><td><button data-index="' + (i+1) + '"onclick="loadPublication(this)" class="btn btn-default">' 
-                    + content[i].pubname + " : " + content[i].authorname + " : " + content[i].releasedate.substring(0,10) + '</button> <br></td></tr>');
+                    + content[i].pubname + " : " + content[i].authorname + " : " + content[i].releasedate + '</button> <br></td></tr>');
             }
 
             if (!window.location.hash) {
                 window.location.hash = '#0';
-                console.log('No Publications loaded');
+                console.log('No specific publication loaded');
             } else {
                 loadPublication(getHash());
-                console.log('Specific Publications loaded');
+                console.log('Specific publication loaded');
             }
 
         } else {
-            console.log('No publication saved');
+            console.log('No publications saved');
         }
 
     },
@@ -48,8 +49,9 @@ $.ajax({
 });
 
 
-function download() {
-    window.open('http://' + window.location.host + '/download?fileDownload=true');
+function downloadPaper() {
+    var url= 'http://' + window.location.host + '/download?id=';
+    window.open(url + paperID);
 }
 
 function getHash(){
@@ -68,7 +70,7 @@ function newPublication() {
         title: "Please enter details for your publication!",
         message: '<div class="input-group"><span class="input-group-addon" id="sizing-addon2">Publicationname</span><input id="pubname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2"></div>'
                     + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Authorname(s)</span><input id="authorname" type="text" class="form-control daypicker" placeholder="..." aria-describedby="sizing-addon2"></div>'
-                    + '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Releasedate of the publication</span><input id="releasedate" value="2015-09-07" type="text" class="form-control daypicker" placeholder="Form: YYYY-MM-DD" aria-describedby="sizing-addon2"></div>'
+                    //+ '<br> <div class="input-group"><span class="input-group-addon" id="sizing-addon2">Releasedate of the publication</span><input id="releasedate" value="2015-09-07" type="text" class="form-control daypicker" placeholder="Form: YYYY-MM-DD" aria-describedby="sizing-addon2"></div>'
                     + '<br> <div> <input type="file" accept="*.tex" class="btn btn-default" onchange="Readdata(event)"> </div>',
                 
         onEscape: function() {},
@@ -106,7 +108,7 @@ function savePublication(pubname,authorname,releasedate){
             window.location.hash = '#' + content._id;
             
             $("#publicationlist").prepend('<tr><td><button data-index="' + ($("#publicationlist").length+1) + '" onclick="loadPublication(this)" class="btn btn-default">'
-                                + content.pubname + " : " + content.authorname + " : " + content.releasedate.substring(0,10) +'</button> <br></td></tr>');
+                                + content.pubname + " : " + content.authorname + " : " + content.releasedate +'</button> <br></td></tr>');
 
              console.log('publication saved to db!');
         },
@@ -126,12 +128,17 @@ function loadPublication(index){
     $.ajax({
         type: 'GET',
         //dataType: 'txt',
-        url: 'http://' + window.location.host + '/getselectedpub',
+        url: 'http://' + window.location.host + '/getselectedpub' + paperID,
         timeout: 5000,
         success: function(content, textStatus ){
-            console.log("load pub does work")
-            console.log(window.location.hash);
+
+            $("#selectedpubname").append(content.pubname); // gleiches Problem: wie an einzelne publikation kommen um den namen ins feld zu schreiben???
+            
+            console.log("load pub does work");
+            console.log(content); // Problem: gibt Array aus. Wie an einzelne Publikation kommen??? 
             window.location.hash = '#' + content._id;
+            console.log(content._id);
+            
         },
         error: function(xhr, textStatus, errorThrown){
             console.error('publication couldnt be selected :^(');

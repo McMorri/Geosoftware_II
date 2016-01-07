@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <meta char="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Moritz Migge, Timon Gottschlich, Marvin Gehrt, Tobias Steinblum, Daniel Schäperklaus">
@@ -13,18 +13,21 @@
 
     <!-- library includes -->
     <link rel="stylesheet" href="style.css" type="text/css">
-    <script type="text/javascript" src="lib/js/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="lib/js/bootstrap.min.js"></script>
-    <script src="lib/js/leaflet.js"></script>
-    <script src="lib/js/leaflet.draw.js"></script>
-    <script src="lib/js/jsnlog.min.js"></script>
+    <script type="text/javascript" src="app/components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="app/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="app/components/leaflet/dist/leaflet.js"></script>
+    <script type="text/javascript" src="app/components/leaflet-dist/leaflet.js"></script>
+    <script type="text/javascript" src="app/components/leaflet-draw/dist/leaflet.draw.js"></script>
+    <script type="text/javascript" src="app/components/jsnlog.js/jsnlog.min.js"></script>
+    <script type="text/javascript" src="app/components/bootbox.js/bootbox.js"></script>
     <script type="text/javascript" src="js/bla.js"></script> 
-    <script type="text/javascript" src="js/bootbox.js"></script>
+    
 
 
-    <link rel="stylesheet" href="lib/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="lib/css/leaflet.css" />
-    <link rel="stylesheet" href="lib/css/leaflet.draw.css" />
+    <link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="app/components/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="app/components/leaflet-dist/leaflet.css" />
+    <link rel="stylesheet" href="app/components/leaflet-draw/dist/leaflet.draw.css" />
 
   </head>
 
@@ -56,7 +59,7 @@
 							<li id="option" class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="#" onclick="download()">Download</a></li>
+									<li><a href="#" onclick="downloadPaper()">Download</a></li>
 									<li role="separator"  class="divider"></li>
 									<li><a href="#" onclick="newPublication()">New Publication</a></li>
 								</ul>
@@ -77,6 +80,7 @@
 	    	<div class="col-md-8">
 	    		<div id="publication"> 
 	    			<p> Selected Paper:</p>
+	    			<p id="selectedpubname"></p>
 	    			<textarea readonly id="pubnameid" type="text" placeholder="publicationname here" class="form-control"> </textarea readonly> 
 	    			<!-- Hier Vorschaufeld für die Paper einfügen--> 
 	    		</div>

@@ -1,0 +1,30 @@
+{
+  "name": "PaperBulb",
+  "description": "Geosoftware2 project PaperBulb",
+  "main": "server.js",
+  "authors": [
+    "Timon Gottschlich",
+    "Moritz Migge",
+    "Marvin Gehrt",
+    "Tobias Steinblum",
+    "Daniel Schäperklaus"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/McMorri/Geosoftware_II",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.6",
+    "bootbox.js": "bootbox#~4.4.0",
+    "leaflet": "~0.7.7",
+    "leaflet-draw": "leaflet.draw#~0.2.4",
+    "jsnlog.js": "jsnlog#~2.15.0"
+  }
+}
