@@ -15,17 +15,16 @@
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="app/components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="app/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="app/components/leaflet/dist/leaflet.js"></script>
     <script type="text/javascript" src="app/components/leaflet-dist/leaflet.js"></script>
     <script type="text/javascript" src="app/components/leaflet-draw/dist/leaflet.draw.js"></script>
     <script type="text/javascript" src="app/components/jsnlog.js/jsnlog.min.js"></script>
     <script type="text/javascript" src="app/components/bootbox.js/bootbox.js"></script>
-    <script type="text/javascript" src="js/bla.js"></script> 
+    <script type="text/javascript" src="js/func.js"></script> 
+    <script type="text/javascript" src="js/Leaflet.js"></script> 
     
 
 
     <link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="app/components/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="app/components/leaflet-dist/leaflet.css" />
     <link rel="stylesheet" href="app/components/leaflet-draw/dist/leaflet.draw.css" />
 
@@ -61,7 +60,7 @@
 								<ul class="dropdown-menu">
 									<li><a href="#" onclick="downloadPaper()">Download</a></li>
 									<li role="separator"  class="divider"></li>
-									<li><a href="#" onclick="newPublication()">New Publication</a></li>
+									<li><a href="#newPubModal">New Publication</a></li>
 								</ul>
 							</li>
 
@@ -72,8 +71,43 @@
 				     	</ul>
 				    </div>				
 				</div><!-- /.container-fluid -->
-			</nav>
+			</nav><!--navbar navbar-default-->
 		</div>  
+
+		<div id="newPubModal" class="modalDialog">
+		    <div>
+		        <h4>New Publication</h4>
+		        <p><b>Please enter details for your publication!</b></p>
+		        <form id="newPubForm" class="input-group" method="POST" action="/savepub" enctype="multipart/form-data" >
+		          
+		            <table class="inputTable">
+		                <tr>
+		                	<div class="input-group">
+		                    <td class="inputTable"><span class="input-group-addon" id="sizing-addon2">Publicationname: </span></td>
+		                    <td class="inputTable"><input id="pubname" name="pubname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2" size="35"></td>
+		                    </div>
+		                </tr>
+		                <tr>
+		                    <div class="input-group">
+		                    <td class="inputTable"><span class="input-group-addon" id="sizing-addon2">Authorname: </span></td>
+		                    <td class="inputTable"><input id="authorname" name="authorname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2" size="35"></td>
+		                    </div>
+		                </tr>
+		            </table>
+		            <br>
+		            <table class="inputTable">
+		                <tr>
+		                    <td class="inputTable">TeX file: </td>
+		                    <td class="inputTable"><input type="file" accept=".tex" class="btn btn-default" onchange="Readdata(event)"></td>
+		                </tr>
+		            </table>
+		            <br>
+		            <a href="#close" title="Cancel" class="btn btn-default">Cancel</a>
+		            <input class="btn btn-default" type="submit" value="Upload" style="float:right"/>
+		        </form>
+		    </div>
+		</div>
+
 
 		<div class="row">
       	<!-- Vorschau des Papers -->
@@ -83,6 +117,9 @@
 	    			<p id="selectedpubname"></p>
 	    			<textarea readonly id="pubnameid" type="text" placeholder="publicationname here" class="form-control"> </textarea readonly> 
 	    			<!-- Hier Vorschaufeld für die Paper einfügen--> 
+
+					<div id="leafletBox" style="height: 500px"></div>
+
 	    		</div>
 	    	</div>
 
