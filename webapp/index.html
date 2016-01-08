@@ -19,7 +19,7 @@
     <script type="text/javascript" src="app/components/leaflet-draw/dist/leaflet.draw.js"></script>
     <script type="text/javascript" src="app/components/jsnlog.js/jsnlog.min.js"></script>
     <script type="text/javascript" src="app/components/bootbox.js/bootbox.js"></script>
-    <script type="text/javascript" src="js/bla.js"></script> 
+    <script type="text/javascript" src="js/func.js"></script> 
     <script type="text/javascript" src="js/Leaflet.js"></script> 
     
 
@@ -78,29 +78,36 @@
 		    <div>
 		        <h4>New Publication</h4>
 		        <p><b>Please enter details for your publication!</b></p>
-		        <form id="newPubForm" class="input-group" method="POST" enctype="multipart/form-data" action="/savepub">
-		            <b>Add the metadata:</b><br><br>
+		        <form id="newPubForm" class="input-group" method="POST" action="/savepub" enctype="multipart/form-data" >
+		          
 		            <table class="inputTable">
 		                <tr>
-		                    <td class="inputTable">Publication Name:</td>
-		                    <td class="inputTable"><input id="title" name="pubname" type="text" size="45"/></td>
+		                	<div class="input-group">
+		                    <td class="inputTable"><span class="input-group-addon" id="sizing-addon2">Publicationname: </span></td>
+		                    <td class="inputTable"><input id="pubname" name="pubname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2" size="35"></td>
+		                    </div>
 		                </tr>
 		                <tr>
-		                    <td class="inputTable">Author Name:</td>
-		                    <td class="inputTable"><input id="authorname" name="authorname" type="text" size="45"/></td>
+		                    <div class="input-group">
+		                    <td class="inputTable"><span class="input-group-addon" id="sizing-addon2">Authorname: </span></td>
+		                    <td class="inputTable"><input id="authorname" name="authorname" type="text" class="form-control" placeholder="..." aria-describedby="sizing-addon2" size="35"></td>
+		                    </div>
 		                </tr>
 		            </table>
+		            <br>
 		            <table class="inputTable">
 		                <tr>
 		                    <td class="inputTable">TeX file: </td>
-		                    <td class="inputTable"><input id="texFile" name="texFile" type="file" accept=".tex" /></td>
+		                    <td class="inputTable"><input type="file" accept=".tex" class="btn btn-default" onchange="Readdata(event)"></td>
 		                </tr>
 		            </table>
-		            <a href="#close" title="Cancel" class="btn cancel" style="background-color: white">Cancel</a>
-		            <input class="btn" type="submit" value="Upload" style="float:right"/>
+		            <br>
+		            <a href="#close" title="Cancel" class="btn btn-default">Cancel</a>
+		            <input class="btn btn-default" type="submit" value="Upload" style="float:right"/>
 		        </form>
 		    </div>
 		</div>
+
 
 		<div class="row">
       	<!-- Vorschau des Papers -->

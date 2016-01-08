@@ -13,12 +13,12 @@ body,html, #impressum {
 
 .modalDialog {
     position: fixed;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Arial, sans-serif;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(41, 41, 41, 0.8);
+    background: slategrey;
     z-index: 99999;
     opacity:0;
     -webkit-transition: opacity 400ms ease-in;
@@ -43,8 +43,4 @@ body,html, #impressum {
 
 .modalDialog > div > h4 {
     margin-top: 10px;
-}
-
-.cancel{
-	float: none;
 }

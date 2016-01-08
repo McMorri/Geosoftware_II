@@ -16,8 +16,6 @@ app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable proce
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var publicationSchema = mongoose.Schema({
-  //pubid: String, 
-  //token: String,
   pubname: String,
   authorname: [String],
   releasedate:	Date
@@ -92,11 +90,8 @@ app.post("/savepub", /* multer instanz, */ function(req,res){
 	//var texFile = req.files['texFile'][0];
 
 	var temppub = new publication({			
-		//pubid: req.body.pubid,
-		//token: req.body.token,
 		pubname: req.body.pubname,
 		authorname: req.body.authorname,
-		//releasedate: req.body.releasedate
 		releasedate: new Date()
 	});
 
@@ -129,7 +124,7 @@ app.get("/getselectedpub/:id", function (req,res){
 
 
 app.get("/download/:id", function (req,res){
-
+//...
 });
 
 
