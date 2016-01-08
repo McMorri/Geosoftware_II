@@ -101,8 +101,6 @@ function loadPublication(element){
         pubID = $(element).data('index');
     }
 
-    console.log("logger loadPublication");
-
 
     $.ajax({
         type: 'GET',
