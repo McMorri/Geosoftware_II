@@ -10,6 +10,10 @@ var fse 	   = require('fs-extra');
 var multer 	   = require('multer');
 
 var app = express();
+var upload = multer ({
+	dest: 'uploads/'
+});
+
 app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable processing of the received post content
 
 
@@ -81,10 +85,21 @@ app.get("/getpub", function (req,res){
 	});
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // TODO: multer instanz erzeugen
+var uploadNewPub = upload.fields([{
+  name: 'mainlatex',
+  maxCount: 1
+}, {
+  name: 'others',
+  maxCount: 20
+}]);
 
-app.post("/savepub", /* multer instanz, */ function(req,res){
+// https://www.codementor.io/tips/9172397814/setup-file-uploading-in-an-express-js-application-using-multer-js
+app.post("/savepub", multer({ dest: './uploads/'}).single('upl'), function(req,res){
 	console.log("save pub is starting fine");
 
 	//var texFile = req.files['texFile'][0];
@@ -92,22 +107,39 @@ app.post("/savepub", /* multer instanz, */ function(req,res){
 	var temppub = new publication({			
 		pubname: req.body.pubname,
 		authorname: req.body.authorname,
-		releasedate: new Date()
+		releasedate: new Date(),
+		text_path: []
 	});
-
-	var paperID = temppub._id;
-
 
 	temppub.save(function (err) {
 		if (err){
 			res.send("Error: "+err); 
 		}
-
 		console.log("tempub was saved ");
 		res.send(temppub);
 	});	
+/*
+	var texFile = req.files['texFile'][0];
+	var paperID = tempub._id;
+	
+	var paperPath = path.join(process.cwd(), "./uploads");
+
+
+    paper.htmlCode = path.join(paperPath, paperID, "tex", path.basename(req.files["texfile"][0].originalname, path.extname(req.files["texfile"][0].originalname)) + ".html");
+
+
+	// current, just pusts it on server
+	// maybe create destination folder?
+	*/
+
+
+
+
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 app.get("/getselectedpub/:id", function (req,res){
