@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
 var fse 	   = require('fs-extra');
 var multer 	   = require('multer');
+var zipZipTop  = require('zip-zip-top');
 
 var app = express();
 var upload = multer ({
@@ -155,8 +156,56 @@ app.get("/getselectedpub/:id", function (req,res){
 });
 
 
-app.get("/download/:id", function (req,res){
-//...
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+	https://www.npmjs.com/package/zip-zip-top
+	Siehe Link für Informationen How to
+*/
+
+// zip Paper
+function zipPub(id) {
+	var newZip = new zipZipTop();
+	var pubPath = config.dataDir.publications + '/' + id;
+	var zipedPubPath = config.dataDir.ziped + '/' + id + '.zip';
+
+	newZip.zipFolder (pubPath, function(err){
+		if(err) console.log(err)
+			newZip.writeToFile(zipedPubPath, fucntion(err) {
+				if(err) console.log(err)
+			}
+	};
+	console.log("Zipping successfull");
+}
+
+
+//folder for zipping
+app.get('/zipFolder/:id/', function(req, res){
+
+	var pubID = req.param.id;
+	var zipedPubPath = config.dataDir.ziped + '/' + pubID ;
+
+	if(...) {
+		return window.alert('File not found or doesnt exisist');
+	}
+
+	zipPub(pubID);
+	res.end();
 });
 
+// download zip
+app.get("/downloadZipedPaper/:id", function (req,res){
 
+	var pubID = req.param.id;
+	var zipedPubPath = config.dataDir.ziped + '/' + pubID + '.zip';
+
+	if(...) {
+		return window.alert('File not found or doesnt exisist');
+	}
+
+	res.setHeader('Content-type', 'application-zip', 'attachment; filename='pubID + '.zip');
+	res.download(zipPath);
+
+});
