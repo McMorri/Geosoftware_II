@@ -172,11 +172,14 @@ function zipPub(id) {
 	var zipedPubPath = config.dataDir.ziped + '/' + id + '.zip';
 
 	newZip.zipFolder (pubPath, function(err){
-		if(err) console.log(err)
-			newZip.writeToFile(zipedPubPath, fucntion(err) {
+		if(err) {
+			console.log(err);
+
+			newZip.writeToFile(zipedPubPath, function(err) {
 				if(err) console.log(err)
-			}
-	};
+			});
+		}
+	});
 	console.log("Zipping successfull");
 }
 
@@ -186,11 +189,11 @@ app.get('/zipFolder/:id/', function(req, res){
 
 	var pubID = req.param.id;
 	var zipedPubPath = config.dataDir.ziped + '/' + pubID ;
-
+	/*
 	if(...) {
 		return window.alert('File not found or doesnt exisist');
 	}
-
+	*/
 	zipPub(pubID);
 	res.end();
 });
@@ -201,11 +204,13 @@ app.get("/downloadZipedPaper/:id", function (req,res){
 	var pubID = req.param.id;
 	var zipedPubPath = config.dataDir.ziped + '/' + pubID + '.zip';
 
+	/*
 	if(...) {
 		return window.alert('File not found or doesnt exisist');
 	}
+	*/
 
-	res.setHeader('Content-type', 'application-zip', 'attachment; filename='pubID + '.zip');
+	res.setHeader('Content-type', 'application-zip', "'attachment; filename='pubID + '.zip'");
 	res.download(zipPath);
 
 });
