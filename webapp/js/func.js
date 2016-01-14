@@ -54,25 +54,22 @@ $(document).ready(function() {
         }
     });
 
-    $('#newPubForm').submit(function(e) {
-        e.preventDefault(); // avoid autmatic form submission
-        $.ajax({
-            url: $("#newPubForm").attr("action"),
-            type: 'POST',
-            data: $("#newPubForm").serialize(),
-            success: function(content) {
-                // add button to right sidebar
-                $("#publicationlist").prepend('<tr><td><button data-index="' + content._id + '" onclick="loadPublication(this)" class="btn btn-default">'
-                   + content.pubname + " : " + content.authorname + " : " + content.releasedate +'</button> <br></td></tr>');
-                $("#selectedpubname").text(content.pubname);
-                console.log('publication saved to db!');
-                //selectedPaperID = content._id;
-                window.location.hash = '#close';
-                window.location.hash = '#' + content._id;
+    $('#newPubForm').ajaxForm({
+        clearForm: true,
+        dataType: 'json',
+        type: 'POST',
+        error: function(err) { console.error('couldnt add a new publication: ' + err) },
+        success: function(content) {
 
-            }
-
-        });
+            // add button to right sidebar
+            $("#publicationlist").prepend('<tr><td><button data-index="' + content._id + '" onclick="loadPublication(this)" class="btn btn-default">'
+               + content.pubname + " : " + content.authorname + " : " + content.releasedate +'</button> <br></td></tr>');
+            $("#selectedpubname").text(content.pubname);
+            console.log('publication saved to db!');
+            //selectedPaperID = content._id;
+            window.location.hash = '#close';
+            window.location.hash = '#' + content._id;
+        }
     });
 }); // end document.ready()
 
@@ -84,9 +81,7 @@ function downloadPaper() {
 
 window.onHashChange=function(){
     var hash = window.location.hash.slice(1);
-    if (hash != '#newPubModal' && hash != '#close' && hash != '') {
-        loadPublication(hash);
-    }
+    loadPublication(hash);
 }
 
 
@@ -101,6 +96,9 @@ function loadPublication(element){
         pubID = $(element).data('index');
     }
 
+    var hashExceptions = ['newPubModal', 'close', '']
+    if (hashExceptions.indexOf(pubID) !== -1) 
+        return console.error('no publication selected');
 
     $.ajax({
         type: 'GET',
@@ -117,6 +115,9 @@ function loadPublication(element){
 
             selectedPaperID = content._id;
             
+            // iframe src attribut ändern zu /getpublicationHTML/<id>
+            $('#pubnameid').attr('src', '/getpublicationHTML/' + content._id);
+            
         },
         error: function(xhr, textStatus, errorThrown){
             console.error('publication couldnt be selected :^(');
@@ -125,25 +126,3 @@ function loadPublication(element){
 
 
 }
-
-
-
-function Readdata(event) {
-    
-    // Init
-    var input = event.target;
-    var reader = new FileReader();
-    
-    /**
-    * @desc Invoked when file is loading. 
-    */ 
-    reader.onload = function(){
-        // logging message per jsnlog, to make sure that the file was loaded successfully
-        JL("file loaded").info("the file was successfully loaded");
-        var filecontent=reader.result;
-            
-        // Read the file
-        reader.readAsText(input.files[0]);
-        //...
-};
-};
