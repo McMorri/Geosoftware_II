@@ -10,14 +10,16 @@
   "author": "Timon Gottschlich, Moritz Migge, Marvin Gehrt, Tobias Steinblum, Daniel Schäperklaus",
   "license": "ISC",
   "dependencies": {
+    "async": "^1.5.2",
+    "body-parser": "~1.14.1",
     "express": "^4.13.3",
-    "js-logger": "^1.2.0",
     "fs-extra": "^0.26.2",
-    "multer": "^1.1.0",
+    "js-logger": "^1.2.0",
     "mongo": "^0.1.0",
     "mongoose": "^4.2.9",
     "mongoose-geojson-schema": "0.0.2",
-    "body-parser": "~1.14.1"
+    "multer": "^1.1.0",
+    "zip-zip-top": "^0.1.0"
   },
   "devDependencies": {
     "bower": "^1.6.5"

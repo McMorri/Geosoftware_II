@@ -7,14 +7,14 @@ var express    = require('express');
 var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
 var fse 	   = require('fs-extra');
+var async	   = require('async');
 var multer 	   = require('multer');
+var zipZipTop  = require('zip-zip-top');
 
 var app = express();
-var upload = multer ({
-	dest: 'uploads/'
-});
+var upload = multer({ dest: __dirname + '/uploads/' });
 
-app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable processing of the received post content
+//app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable processing of the received post content
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,10 +22,8 @@ app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable proce
 var publicationSchema = mongoose.Schema({
   pubname: String,
   authorname: [String],
-  releasedate:	Date
+  releasedate:	Date,
 });
-
-
 var publication = mongoose.model('publication' , publicationSchema);
 
 
@@ -36,7 +34,7 @@ var publication = mongoose.model('publication' , publicationSchema);
 var config = {
     httpPort: 8080,
     mongoPort: 27017
-}
+};
 
 
 /* init database connection */
@@ -80,8 +78,9 @@ app.get("/getpub", function (req,res){
 			return console.log(err);
 		}
 
-		console.log(feature);
-		return console.log(res.send(feature));
+		//console.log(feature);
+		return res.send(feature);
+		res.sendFile(/*dateipfad*/);
 	});
 });
 
@@ -89,59 +88,71 @@ app.get("/getpub", function (req,res){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// TODO: multer instanz erzeugen
-var uploadNewPub = upload.fields([{
-  name: 'mainlatex',
-  maxCount: 1
-}, {
-  name: 'others',
-  maxCount: 20
-}]);
+// multer instanz erzeugen
+var uploadNewPub = upload.fields([
+	{ name: 'mainlatex', maxCount: 1 },
+	{ name: 'others' }
+]);
 
 // https://www.codementor.io/tips/9172397814/setup-file-uploading-in-an-express-js-application-using-multer-js
-app.post("/savepub", multer({ dest: './uploads/'}).single('upl'), function(req,res){
+app.post("/savepub", uploadNewPub, function(req,res){
 	console.log("save pub is starting fine");
 
-	//var texFile = req.files['texFile'][0];
+	var texFile = req.files['mainlatex'][0];
+	var otherFiles = req.files['others'];
+	
+	// append texFile to otherFiles array, so we have all files in one array
+	otherFiles.push(texFile);
 
-	var temppub = new publication({			
+
+	// DB eintrag erstellen
+	var temppub = new publication({
 		pubname: req.body.pubname,
 		authorname: req.body.authorname,
 		releasedate: new Date(),
-		text_path: []
 	});
 
-	temppub.save(function (err) {
-		if (err){
-			res.send("Error: "+err); 
+	function moveFiles(files, pubID, callback) {
+		async.eachSeries(files, function(file, done) {
+			fse.move(
+				__dirname + '/uploads/' + file.filename,
+				__dirname + '/data/' + pubID + '/' + file.originalname,
+				done
+			);
+		}, callback);
+	}
+
+	async.series([
+		// verschiebe alle dateien (otherfiles + texfile) in data ordner
+		async.apply(moveFiles, otherFiles, temppub._id),
+		// tex zu html konvertieren
+		function(callback) {
+			// node modul child_process um LaTeXML oÄ aufzurufen
+			callback(null, '');
+		},
+		// DB eintrag speichern
+		async.apply(temppub.save)
+	], function done (err, results) {
+		// alles fertig
+		if (err) {
+			console.error('couldnt save publication: ' + err);
+			return res.status(500).send('couldnt save publication: ' + err);
 		}
-		console.log("tempub was saved ");
+
+		console.log('pub saved');
 		res.send(temppub);
-	});	
-/*
-	var texFile = req.files['texFile'][0];
-	var paperID = tempub._id;
-	
-	var paperPath = path.join(process.cwd(), "./uploads");
-
-
-    paper.htmlCode = path.join(paperPath, paperID, "tex", path.basename(req.files["texfile"][0].originalname, path.extname(req.files["texfile"][0].originalname)) + ".html");
-
-
-	// current, just pusts it on server
-	// maybe create destination folder?
-	*/
-
-
-
+	});
 
 });
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ * @desc  return the paper metadata
+ */
 app.get("/getselectedpub/:id", function (req,res){
 
 	publication.findOne({_id: req.params.id}, function (err, feature) {
@@ -154,9 +165,71 @@ app.get("/getselectedpub/:id", function (req,res){
 	});	
 });
 
-
-app.get("/download/:id", function (req,res){
-//...
+/**
+ * return  the converted paper
+ */
+app.get('/getpublicationHTML/:id', function(req, res) {
+	var id = req.params.id;
+	res.send(__dirname + '/data/' + id + '/paper.html');
 });
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+	https://www.npmjs.com/package/zip-zip-top
+	Siehe Link für Informationen How to
+*/
+
+// zip Paper
+function zipPub(id) {
+	var newZip = new zipZipTop();
+	var pubPath = config.dataDir.publications + '/' + id;
+	var zipedPubPath = config.dataDir.ziped + '/' + id + '.zip';
+
+	newZip.zipFolder (pubPath, function(err){
+		if(err) {
+			console.log(err);
+
+			newZip.writeToFile(zipedPubPath, function(err) {
+				if(err) console.log(err)
+			});
+		}
+	});
+	console.log("Zipping successfull");
+}
+
+
+//folder for zipping
+app.get('/zipFolder/:id/', function(req, res){
+
+	var pubID = req.param.id;
+	var zipedPubPath = config.dataDir.ziped + '/' + pubID ;
+	/*
+	if(...) {
+		return window.alert('File not found or doesnt exisist');
+	}
+	*/
+	zipPub(pubID);
+	res.end();
+});
+
+// download zip
+app.get("/downloadZipedPaper/:id", function (req,res){
+
+	var pubID = req.param.id;
+	var zipedPubPath = config.dataDir.ziped + '/' + pubID + '.zip';
+
+	/*
+	if(...) {
+		return window.alert('File not found or doesnt exisist');
+	}
+	*/
+
+	res.setHeader('Content-type', 'application-zip', "'attachment; filename='pubID + '.zip'");
+	res.download(zipPath);
+
+});

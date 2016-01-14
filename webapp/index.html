@@ -14,6 +14,7 @@
     <!-- library includes -->
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="app/components/jquery/dist/jquery.min.js"></script>
+    <script src="//oss.maxcdn.com/jquery.form/3.50/jquery.form.min.js"></script> <!-- jquery form plugin-->
     <script type="text/javascript" src="app/components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="app/components/leaflet-dist/leaflet.js"></script>
     <script type="text/javascript" src="app/components/leaflet-draw/dist/leaflet.draw.js"></script>
@@ -21,7 +22,6 @@
     <script type="text/javascript" src="app/components/bootbox.js/bootbox.js"></script>
     <script type="text/javascript" src="js/func.js"></script> 
     <script type="text/javascript" src="js/Leaflet.js"></script> 
-    
 
 
     <link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
@@ -99,8 +99,12 @@
 		            <br>
 		            <table class="inputTable">
 		                <tr>
-		                    <td class="inputTable">TeX file: </td>
-		                    <td class="inputTable"><input type="file" accept=".tex" class="btn btn-default" onchange="Readdata(event)"></td>
+		                    <td class="inputTable">TeX file:</td>
+		                    <td class="inputTable"><input type="file" name="mainlatex" accept=".tex" class="btn btn-default" ></td>
+		                </tr>
+		                <tr>
+		                    <td class="inputTable">Other files: </td>
+		                    <td class="inputTable"><input type="file" name="others" accept="*" class="btn btn-default"></td>
 		                </tr>
 		            </table>
 		            <br>
@@ -115,11 +119,9 @@
       	<!-- Vorschau des Papers -->
 	    	<div class="col-md-8">
 	    		<div id="publication"> 
-	    			<p> Selected Paper:</p>
-	    			<p id="selectedpubname"></p>
-	    			<textarea readonly id="pubnameid" type="text" placeholder="publicationname here" class="form-control"> </textarea readonly> 
-	    			<!-- Hier Vorschaufeld für die Paper einfügen--> 
-
+	    			<div>Selected Paper:</div> <div id="selectedpubname"></div>
+	    			
+	    			<iframe id="pubnameid" width="100%" src=""></iframe>
 					<div id="leafletBox" style="height: 500px"></div>
 
 	    		</div>
