@@ -10,6 +10,7 @@ var fse 	   = require('fs-extra');
 var async	   = require('async');
 var multer 	   = require('multer');
 var zipZipTop  = require('zip-zip-top');
+var child_process = require('child_process');
 
 var app = express();
 var upload = multer({ dest: __dirname + '/uploads/' });
@@ -100,10 +101,10 @@ app.post("/savepub", uploadNewPub, function(req,res){
 
 	var texFile = req.files['mainlatex'][0];
 	var otherFiles = req.files['others'];
+	var rdataFiles = []; // paths to all uploaded rdata files
 	
 	// append texFile to otherFiles array, so we have all files in one array
 	otherFiles.push(texFile);
-
 
 	// DB eintrag erstellen
 	var temppub = new publication({
@@ -112,11 +113,23 @@ app.post("/savepub", uploadNewPub, function(req,res){
 		releasedate: new Date(),
 	});
 
+	// path where all files of a publication are stored
+	var pubPath = __dirname + '/data/' + temppub._id + '/'
+
+
+	//find all rdata files for conversion
+	for (var i = 0; i < otherFiles.length; i++) {
+	    var fileName = otherFiles[i].originalname;
+	    var extension = fileName.split('.').pop();
+	    if (extension.toLowerCase() == 'rdata')
+	    	rdataFiles.push(pubPath + fileName);
+	}
+
 	function moveFiles(files, pubID, callback) {
 		async.eachSeries(files, function(file, done) {
 			fse.move(
 				__dirname + '/uploads/' + file.filename,
-				__dirname + '/data/' + pubID + '/' + file.originalname,
+				pubPath + file.originalname,
 				done
 			);
 		}, callback);
@@ -130,6 +143,8 @@ app.post("/savepub", uploadNewPub, function(req,res){
 			// node modul child_process um LaTeXML oÄ aufzurufen
 			callback(null, '');
 		},
+		// Rdata files aus der erstellten Liste konvertieren
+		async.apply(rdataconvert, rdataFiles),
 		// DB eintrag speichern
 		async.apply(temppub.save)
 	], function done (err, results) {
@@ -233,3 +248,20 @@ app.get("/downloadZipedPaper/:id", function (req,res){
 	res.download(zipPath);
 
 });
+
+//child_process
+//accepts an array of input paths to be converted ( assumes an rdata extension)
+//callback shows outputpath if successful
+function rdataconvert (inputpathArray, callback){
+	async.eachSeries(inputpathArray, function(inputpath, callbackEach) {
+		// assume a filextension with 5 characters (.Rdata)
+		var outputpath = inputpath.substr(0, inputpath.length - 6) + '.csv';
+		var command = "Rscript rdataconvert.r --input "+inputpath+" --output "+outputpath;
+		child_process.exec(command, callbackEach);
+	}, callback);
+}
+
+
+
+
+
