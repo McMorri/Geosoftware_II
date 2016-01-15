@@ -10,6 +10,7 @@ var fse 	   = require('fs-extra');
 var async	   = require('async');
 var multer 	   = require('multer');
 var zipZipTop  = require('zip-zip-top');
+var child_process = require('child_process');
 
 var app = express();
 var upload = multer({ dest: __dirname + '/uploads/' });
@@ -233,3 +234,24 @@ app.get("/downloadZipedPaper/:id", function (req,res){
 	res.download(zipPath);
 
 });
+
+//child_process
+//callback shows outputpath if successful
+function rdataconvert (inputpath,callback){
+
+	// assume a filextension with 5 characters (.Rdata)
+        var outputpath = inputpath.substr(0, inputpath.length - 6) + '.csv';
+        var command = "Rscript rdataconvert.r --input "+inputpath+" --output "+outputpath;
+	var cp = child_process.spawn(command);
+	// wird aufgerufen wenn Konvertierung abgeschlossen
+	cp.on('close', function(code){
+		if (code!=0) return callback("rdata conversion failed!");
+		callback(null, outputpath);
+	});
+
+}
+
+
+
+
+
