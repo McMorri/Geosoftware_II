@@ -3,6 +3,7 @@
 library(R.utils)
 
 #returns object from rdata file
+#http://stackoverflow.com/a/5577647
 loadRDataObj <- function(path) {
  env <- new.env() 
  nm <- load(path, envir = env, verbose = TRUE)[1]
