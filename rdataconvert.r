@@ -1,5 +1,6 @@
-#library(zoo)
-#library(xts)
+library(zoo)
+library(xts)
+library(sp)
 library(R.utils)
 
 #returns object from rdata file
@@ -13,20 +14,21 @@ loadRDataObj <- function(path) {
 # script is called with scriptname.r --in <inputpath> --out <outputpath>
 args <- commandArgs(asValues = TRUE)
 inputPath <- args$input
-outPath <- args$output
+outputPath <- args$output
 
 object <- loadRDataObj(inputPath)
 
-# prüfe welcher typ das objekt hat: xts, zoo, oder sp?
-# ...
-
-# if xts or zoo
-write.csv(object, outPath, row.names=TRUE)
-
-# if sp
-# ...
-
-
+# check object type: xts? zoo? sp?
+classes <- class(object)
+if("ts" %in% classes){
+	if(xtsible(object)){
+		#todo xts conversion
+	}else{
+		write.zoo(object, file=outputPath, sep=",",row.names=FALSE)
+	}
+}else{
+	#todo sp conversion
+} 
 
 
 
