@@ -11,6 +11,7 @@ var async	   = require('async');
 var multer 	   = require('multer');
 var zipZipTop  = require('zip-zip-top');
 var child_process = require('child_process');
+var converter  = require('./webapp/js/latex2html.js');
 
 var app = express();
 var upload = multer({ dest: __dirname + '/uploads/' });
@@ -115,8 +116,6 @@ app.post("/savepub", uploadNewPub, function(req,res){
 
 	// path where all files of a publication are stored
 	var pubPath = __dirname + '/data/' + temppub._id + '/'
-
-
 	//find all rdata files for conversion
 	for (var i = 0; i < otherFiles.length; i++) {
 	    var fileName = otherFiles[i].originalname;
@@ -195,6 +194,21 @@ app.get('/getpublicationHTML/:id', function(req, res) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
+  var inputdir = path.join(paperpath, paperid, "tex");
+  var input = path.basename(req.files["texfile"][0].originalname);
+
+  converter.convert(inputdir, input, paper);
+*/
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+/*
 	https://www.npmjs.com/package/zip-zip-top
 	Siehe Link für Informationen How to
 */
@@ -259,9 +273,4 @@ function rdataconvert (inputpathArray, callback){
 		var command = "Rscript rdataconvert.r --input "+inputpath+" --output "+outputpath;
 		child_process.exec(command, callbackEach);
 	}, callback);
-}
-
-
-
-
-
+};
