@@ -11,7 +11,7 @@ var async	   = require('async');
 var multer 	   = require('multer');
 var zipZipTop  = require('zip-zip-top');
 var child_process = require('child_process');
-var converter  = require('./webapp/js/latex2html.js');
+var latexConverter  = require('./webapp/js/latex2html.js');
 
 var app = express();
 var upload = multer({ dest: __dirname + '/uploads/' });
@@ -138,12 +138,11 @@ app.post("/savepub", uploadNewPub, function(req,res){
 		// verschiebe alle dateien (otherfiles + texfile) in data ordner
 		async.apply(moveFiles, otherFiles, temppub._id),
 		// tex zu html konvertieren
-		function(callback) {
-			// node modul child_process um LaTeXML oÄ aufzurufen
-			callback(null, '');
-		},
+		//async.apply(latexConverter.convert, pubPath, texFile.originalname),
 		// Rdata files aus der erstellten Liste konvertieren
 		async.apply(rdataconvert, rdataFiles),
+		// create zip archive of paper
+		async.apply(zipPub, temppub._id),
 		// DB eintrag speichern
 		async.apply(temppub.save)
 	], function done (err, results) {
@@ -184,21 +183,10 @@ app.get("/getselectedpub/:id", function (req,res){
  */
 app.get('/getpublicationHTML/:id', function(req, res) {
 	var id = req.params.id;
-	res.send(__dirname + '/data/' + id + '/paper.html');
+	res.sendFile(__dirname + '/data/' + id + '/paper.html');
 });
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-  var inputdir = path.join(paperpath, paperid, "tex");
-  var input = path.basename(req.files["texfile"][0].originalname);
-
-  converter.convert(inputdir, input, paper);
-*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,53 +202,34 @@ app.get('/getpublicationHTML/:id', function(req, res) {
 */
 
 // zip Paper
-function zipPub(id) {
+function zipPub(id, callback) {
 	var newZip = new zipZipTop();
-	var pubPath = config.dataDir.publications + '/' + id;
-	var zipedPubPath = config.dataDir.ziped + '/' + id + '.zip';
+	var pubPath      = __dirname + '/data/' + id + '/';
+	var zipedPubPath = __dirname + '/data/' + id + '.zip';
 
-	newZip.zipFolder (pubPath, function(err){
-		if(err) {
-			console.log(err);
+	newZip.zipFolder(pubPath, function(err){
+		if(err) return callback(err);
 
-			newZip.writeToFile(zipedPubPath, function(err) {
-				if(err) console.log(err)
-			});
-		}
+		newZip.writeToFile(zipedPubPath, function(err) {
+			if(err) return callback(err);
+			callback(null);
+		});
 	});
-	console.log("Zipping successfull");
 }
 
-
-//folder for zipping
-app.get('/zipFolder/:id/', function(req, res){
-
-	var pubID = req.param.id;
-	var zipedPubPath = config.dataDir.ziped + '/' + pubID ;
-	/*
-	if(...) {
-		return window.alert('File not found or doesnt exisist');
-	}
-	*/
-	zipPub(pubID);
-	res.end();
-});
-
 // download zip
-app.get("/downloadZipedPaper/:id", function (req,res){
+app.get("/download/:id", function (req,res){
+	var pubID = req.params.id;
+	var zipedPubPath = __dirname + '/data/' + pubID + '.zip';
 
-	var pubID = req.param.id;
-	var zipedPubPath = config.dataDir.ziped + '/' + pubID + '.zip';
-
-	/*
-	if(...) {
-		return window.alert('File not found or doesnt exisist');
-	}
-	*/
-
-	res.setHeader('Content-type', 'application-zip', "'attachment; filename='pubID + '.zip'");
-	res.download(zipPath);
-
+	// check if ziped file exists
+	fse.access(zipedPubPath, fse.F_OK, function(err) {
+		if (err) return res.status(404).send('zipped publication not found..... :^(((((')
+	
+		// respond with zip file as download
+		res.setHeader('Content-type', 'application-zip', "'attachment; filename='" + pubID + "'.zip'");
+		res.download(zipedPubPath);
+	});
 });
 
 //child_process

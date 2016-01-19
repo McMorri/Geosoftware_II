@@ -22,7 +22,6 @@
     <script type="text/javascript" src="app/components/bootbox.js/bootbox.js"></script>
     <script type="text/javascript" src="js/func.js"></script> 
     <script type="text/javascript" src="js/Leaflet.js"></script> 
-	<script type="text/javascript" src="js/latex2html.js"></script>
 
     <link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="app/components/leaflet-dist/leaflet.css" />
@@ -104,7 +103,7 @@
 		                </tr>
 		                <tr>
 		                    <td class="inputTable">Other files: </td>
-		                    <td class="inputTable"><input type="file" name="others" accept="*" class="btn btn-default"></td>
+		                    <td class="inputTable"><input type="file" name="others" accept="*"  multiple="" class="btn btn-default"></td>
 		                </tr>
 		            </table>
 		            <br>
@@ -121,7 +120,7 @@
 	    		<div id="publication"> 
 	    			<div>Selected Paper:</div> <div id="selectedpubname"></div>
 	    			
-	    			<iframe id="pubnameid" width="100%" src="/getpublicationHTML/<id>"></iframe>
+	    			<iframe id="pubnameid" width="100%" src=""></iframe>
 					<div id="leafletBox" style="height: 500px"></div>
 
 	    		</div>

@@ -4,76 +4,68 @@
  * @desc Converts a LaTeX file into HTML using latexml and does some additional conversations.
  */
 
-function convert(inputdir, input, paper) {
-  var path = require("path");
-  var fse = require('fs-extra');
+var path = require("path");
+var fse  = require('fs-extra');
 
-  // store the current working directory
-  // then switch to the input dir to prevent latexml from cluttering the main directory
-  var currentwdir = process.cwd();
-  process.chdir(inputdir);
+module.exports.convert = function(inputdir, input, callback) {
+	
 
-  // start latexml
-  var spawn = require('child_process').spawn;
-  var latexml = spawn("latexml", ["--dest=" + path.basename(input, ".tex") + ".xml", input]);
+	// store the current working directory
+	// then switch to the input dir to prevent latexml from cluttering the main directory
+	var currentwdir = process.cwd();
+	process.chdir(inputdir);
 
-  latexml.on('exit', function(code) {
-    console.log("Step 1: latexml finished, returning " + code);
+	// start latexml
+	var spawn = require('child_process').spawn;
+	var latexml = spawn("latexml", ["--dest=" + path.basename(input, ".tex") + ".xml", input]);
 
-    if(code != 0) {
-      paper.processing_state = -1;
-      paper.save(function(error) {});
-      return;
-    }
+	latexml.on('exit', function(code) {
+		console.log("Step 1: latexml finished, returning " + code);
 
-    process.chdir(inputdir);
+		if(code != 0) return callback("Error while converting paper from tex to xml");
 
-    // start latexmlpost
-    var lmlpost = spawn("latexmlpost", ["-dest=" + path.basename(input, ".tex") + ".html", path.basename(input, ".tex") + ".xml"]);
-    lmlpost.on('exit', function(code) {
-      console.log("Step 2: latexmlpost finished, returning " + code);
+		process.chdir(inputdir);
 
-      if(code != 0) {
-        paper.processing_state = -2;
-        paper.save(function(error) {});
-        return;
-      }
+		// start latexmlpost
+		var lmlpost = spawn("latexmlpost", ["-dest=" + path.basename(input, ".tex") + ".html", path.basename(input, ".tex") + ".xml"]);
+		lmlpost.on('exit', function(code) {
+			console.log("Step 2: latexmlpost finished, returning " + code);
 
-      process.chdir(currentwdir);
+			if(code != 0) return callback("Error while converting paper from xml to html");
 
-      // inject script tags
-      try {
-        var htmlData = fse.readFileSync(path.join(inputdir, path.basename(input, ".tex") + ".html"), "utf-8");
+			process.chdir(currentwdir);
 
-        htmlData = htmlData.replace('<head>',
-          '<head><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />' +
-          '<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>' +
-          '<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>' +
-          '<script src="/js/iframe.js"></script>' +
-          '<script src="/js/bowerstuff/Flot/jquery.flot.js"></script>' +
-          '<script src="/js/bowerstuff/Flot/jquery.flot.navigate.js"></script>' +
-          '<script src="/js/bowerstuff/Flot/jquery.flot.resize.js"></script>' +
-          '<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>');
+			/*// inject script tags
+			try {
+				var htmlData = fse.readFileSync(path.join(inputdir, path.basename(input, ".tex") + ".html"), "utf-8");
 
-        fse.writeFileSync(path.join(inputdir, path.basename(input, ".tex") + ".html"), htmlData);
+				htmlData = htmlData.replace('<head>',
+					'<head><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />' +
+					'<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>' +
+					'<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>' +
+					'<script src="/js/iframe.js"></script>' +
+					'<script src="/js/bowerstuff/Flot/jquery.flot.js"></script>' +
+					'<script src="/js/bowerstuff/Flot/jquery.flot.navigate.js"></script>' +
+					'<script src="/js/bowerstuff/Flot/jquery.flot.resize.js"></script>' +
+					'<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>');
 
-        console.log("Step 3: injecting script tags finished");
-      }
-      catch(e) {
-        paper.processing_state = -3;
-        paper.save(function(error) {});
-        return;
-      }
+				fse.writeFileSync(path.join(inputdir, path.basename(input, ".tex") + ".html"), htmlData);
 
-      // saving that the conversion was succesful
-      paper.processing_state = 1;
-      paper.save(function(error) {});
-      return;
+				console.log("Step 3: injecting script tags finished");
+			}
+			catch(e) {
+				paper.processing_state = -3;
+				paper.save(function(error) {});
+				return;
+			}*/
 
-    });
+			// saving that the conversion was succesful
+			return callback(null);
 
-  });
+		});
 
-  process.chdir(currentwdir);
+	});
+
+	process.chdir(currentwdir);
 
 }

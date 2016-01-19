@@ -108,7 +108,7 @@ function loadPublication(element){
         success: function(content, textStatus ){
 
             $("#selectedpubname").text(content.pubname);
-            //$("#pubnameid").text("Inhalter der Datei");
+            //$("#pubnameid").text("Inhalt der Datei");
 
             window.location.hash = '#' + content._id;
             console.log(content._id);
