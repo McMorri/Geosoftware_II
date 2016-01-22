@@ -13,12 +13,16 @@
     "async": "^1.5.2",
     "body-parser": "~1.14.1",
     "express": "^4.13.3",
+    "express-session": "^1.13.0",
     "fs-extra": "^0.26.2",
+    "gdal": "^0.8.0",
     "js-logger": "^1.2.0",
     "mongo": "^0.1.0",
     "mongoose": "^4.2.9",
     "mongoose-geojson-schema": "0.0.2",
     "multer": "^1.1.0",
+    "passport": "^0.3.2",
+    "passport-github2": "^0.1.9",
     "zip-zip-top": "^0.1.0"
   },
   "devDependencies": {

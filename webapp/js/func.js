@@ -10,6 +10,26 @@ var publicationArray = [];
 
 $(document).ready(function() {
 
+  ///////////Authentifikation/////////////////
+  /**
+   *   @desc checks whether there is a logged in user and modifies UI on main page
+   */
+  $.ajax({
+    url: location.origin + '/isLoggedIn',
+    type: 'GET',
+    success: function(content, textStatus) {
+      if (content) {
+        $('#newPubModal').removeClass('disabled');
+        $('#loginButton').text('Logout');
+        $('#loginButton').prop('title', 'Logout');
+      } else {
+        $('#newPubModal').addClass('disabled');
+        $('#newPubModal').prop('title', 'Login to upload a paper');
+      }
+    }
+  });
+
+
     // get pubID from url hash
     selectedPaperID = window.location.hash.slice(1);
     if (selectedPaperID) {
@@ -125,4 +145,28 @@ function loadPublication(element){
     });
 
 
+}
+
+///////////Authentifikation/////////////////
+/**
+ *   @desc checks whether there is a logged in user and starts log-out or logg-in procedure
+ */
+function loginOrLogout() {
+  $.ajax({
+    url: location.origin + '/isLoggedIn',
+    type: 'GET',
+    success: function(content, textStatus) {
+      if (content) { // there is a logged in user
+        console.log("logging out...");
+        $('#newPubModal').addClass('disabled');
+        $('#loginButton').text('Login');
+        $('#loginButton').prop('title', 'Login with Google');
+        window.location.replace(location.origin + '/logout');
+      } else {
+        console.log("logging in...");
+        window.location.replace(location.origin + '/auth/google'); // redirecting to log in
+        $('#newPubModal').removeClass('disabled');
+      }
+    }
+  });
 }
