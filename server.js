@@ -22,7 +22,6 @@ var upload = multer({ dest: __dirname + '/uploads/' });
 
 //app.use(bodyParser.urlencoded({extended: true, limit:'100mb'})); // enable processing of the received post content
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var publicationSchema = mongoose.Schema({
@@ -32,7 +31,13 @@ var publicationSchema = mongoose.Schema({
 });
 var publication = mongoose.model('publication' , publicationSchema);
 
-
+var userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  provider:	String,
+  providerID: String
+});
+var userModel = mongoose.model('User' , userSchema);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

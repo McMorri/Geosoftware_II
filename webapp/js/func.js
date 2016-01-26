@@ -170,3 +170,41 @@ function loginOrLogout() {
     }
   });
 }
+
+function replaceTags(filepath) {
+
+    var htmlString = fse.readFileSync(filepath)
+    var tagSchema = '(!-IAE';
+    var lines = htmlString.split('\n');
+    var IAEs = []; // contains arrays of IAE arguments in the form of ["(!-IAE", "type=map", "dataset=file.json"]
+
+    // find each marker
+    for (var i = 0; i < lines.length; i++) {
+        if (lines[i].indexOf(tagSchema) == -1) continue;
+        IAEs[i] = (lines[i].split(','));
+    }
+
+    // parse each marker & call conversion
+    for (var i = 0; i < IAEs.length; i++) {
+        if (typeof IAEs[i] == Array) {
+            var type    = IAEs[i][1].split('=')[1];
+            var dataset = IAEs[i][2].split('=')[1];
+            var visualisationDiv;
+
+            // generate the visualisations
+            if (type == 'map')                visualisationDiv = generateMap(dataset);
+            else if (type == 'timeseries') visualisationDiv = generateTimeseries(dataset);
+
+            // replace each marker line with actual visualisation html code
+            var lines[i] = visualisationDiv;
+        }
+    }
+
+
+    // put string together again
+    var newHtml = lines.join('\n');
+
+    // save to file
+    fse.writeFileSync(filepath, newHtml);
+}
+
