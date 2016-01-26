@@ -11,7 +11,6 @@ var fse 	   		= require('fs-extra');
 var async	   		= require('async');
 var passport 		= require('passport');
 var GitHubStrategy  = require('passport-github2').Strategy;
-//var oauth_keys 		= require('./oauth_keys.js');
 var gdal 			= require('gdal');
 var multer 	   		= require('multer');
 var zipZipTop  		= require('zip-zip-top');
@@ -143,7 +142,7 @@ app.post("/savepub", uploadNewPub, function(req,res){
 		// verschiebe alle dateien (otherfiles + texfile) in data ordner
 		async.apply(moveFiles, otherFiles, temppub._id),
 		// tex zu html konvertieren
-		//async.apply(latexConverter.convert, pubPath, texFile.originalname),
+		async.apply(latexConverter.convert, pubPath, texFile.originalname),
 		// Rdata files aus der erstellten Liste konvertieren
 		async.apply(rdataconvert, rdataFiles),
 		// create zip archive of paper
@@ -264,10 +263,9 @@ app.use(passport.session());
 
 /** GITHUB STRATEGY **/
 	passport.use(new GitHubStrategy({
-		clientID: oauth_keys.GITHUB_CLIENT_ID,
-		clientSecret: oauth_keys.GITHUB_CLIENT_SECRET,
-		callbackURL: 'https://' + config.hostname + ':' + config.httpsPort
-			+ '/auth/github/callback/'
+		clientID: '8e633ab00b16f82e20a4',
+		clientSecret: 'ca40b716773595fa4a1a97109eab6ea5ad43d538',
+		callbackURL: 'http://' + '127.0.0.1' + ':8080' + '/auth/github/callback/'
 	},
 	function(accessToken, refreshToken, profile, done) {
 		//First we need to check if the user logs in for the first time

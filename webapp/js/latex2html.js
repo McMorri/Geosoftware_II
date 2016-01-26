@@ -27,7 +27,7 @@ module.exports.convert = function(inputdir, input, callback) {
 		process.chdir(inputdir);
 
 		// start latexmlpost
-		var lmlpost = spawn("latexmlpost", ["-dest=" + path.basename(input, ".tex") + ".html", path.basename(input, ".tex") + ".xml"]);
+		var lmlpost = spawn("latexmlpost", ["-dest=paper.html", path.basename(input, ".tex") + ".xml"]);
 		lmlpost.on('exit', function(code) {
 			console.log("Step 2: latexmlpost finished, returning " + code);
 
