@@ -136,7 +136,7 @@ function loadPublication(element){
             selectedPaperID = content._id;
             
             // iframe src attribut ändern zu /getpublicationHTML/<id>
-            $('#pubnameid').attr('src', '/getpublicationHTML/' + content._id);
+            $('#pubnameid').attr('src', '/publications/' + content._id + '/paper.html');
             
         },
         error: function(xhr, textStatus, errorThrown){
@@ -196,7 +196,7 @@ function replaceTags(filepath) {
             else if (type == 'timeseries') visualisationDiv = generateTimeseries(dataset);
 
             // replace each marker line with actual visualisation html code
-            var lines[i] = visualisationDiv;
+            lines[i] = visualisationDiv;
         }
     }
 
