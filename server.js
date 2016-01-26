@@ -76,6 +76,10 @@ app.use(function(req, res, next) {
 // deliver all contents of the folder '/webapp' under '/'
 app.use(express.static(__dirname + '/webapp'));
 
+// deliver content under data
+app.use('/publications', express.static(__dirname+'/data'));	
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -187,15 +191,7 @@ app.get("/getselectedpub/:id", function (req,res){
 	});	
 });
 
-/**
- * return  the converted paper
- */
-app.get('/getpublicationHTML/:id', function(req, res) {
-	var id = req.params.id;
-	res.sendFile(__dirname + '/data/' + id + '/paper.html');
-	
 
-});
 
 
 
