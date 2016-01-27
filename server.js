@@ -37,7 +37,7 @@ var userSchema = new mongoose.Schema({
   provider:	String,
   providerID: String
 });
-var userModel = mongoose.model('User' , userSchema);
+var userModel = mongoose.model('user' , userSchema);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -270,14 +270,14 @@ app.use(passport.session());
 	},
 	function(accessToken, refreshToken, profile, done) {
 		//First we need to check if the user logs in for the first time
-		mongo.models.users.findOne({
+		userModel.findOne({
 			'providerID': profile.id,
 			'provider': 'github'
 		}, function(err, user) {
 			if (err) return done(err);
 			if (!user) {
 			// no user existent --> new user --> create a new one
-				user = new mongo.models.users({
+				user = new userModel({
 					name: profile.displayName,
 					email: profile.emails[0].value,
 					username: profile.username,
