@@ -154,6 +154,8 @@ app.post("/savepub", uploadNewPub, function(req,res){
 		async.apply(latexConverter.convert, pubPath, texFile.originalname),
 		// Rdata files aus der erstellten Liste konvertieren
 		async.apply(rdataconvert, rdataFiles),
+		// replacing tags in html
+		async.apply(latexConverter.replaceTags,pubPath + 'paper.html'),
 		// create zip archive of paper
 		async.apply(zipPub, temppub._id),
 		// DB eintrag speichern
@@ -164,7 +166,6 @@ app.post("/savepub", uploadNewPub, function(req,res){
 			console.error('couldnt save publication: ' + err);
 			return res.status(500).send('couldnt save publication: ' + err);
 		}
-
 		console.log('pub saved');
 		res.send(temppub);
 	});
@@ -191,7 +192,15 @@ app.get("/getselectedpub/:id", function (req,res){
 	});	
 });
 
-
+/**
+ - * return  the converted paper
+ - 
+ app.get('/getpublicationHTML/:id', function(req, res) {
+ 	var id = req.params.id;
+ 	res.sendFile(__dirname + '/data/' + id + '/paper.html');
+ 
+  
+ });*/
 
 
 
@@ -257,7 +266,9 @@ function rdataconvert (inputpathArray, callback){
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.use(session({
-  secret: 'anything'
+  secret: 'anything',
+  resave: false,
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -361,3 +372,6 @@ app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
+
+
+
