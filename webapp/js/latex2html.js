@@ -88,17 +88,17 @@ module.exports.replaceTags = function(filepath, callback) {
     var newHtml = lines.join('\n');
 
     //inject script tags
-			
+
+
+	// brauchen wir flot(navigate,resize,time), mathJax.js, leaflet.markercluster, moment.js, polarmap.js und proj4leaflet???		
 	newHtml = newHtml.replace('<head>',
-		'<head><>');
-					/*link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />' +
-					'<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>' +
-					'<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>' +
-					'<script src="/js/iframe.js"></script>' +
-					'<script src="/js/bowerstuff/Flot/jquery.flot.js"></script>' +
-					'<script src="/js/bowerstuff/Flot/jquery.flot.navigate.js"></script>' +
-					'<script src="/js/bowerstuff/Flot/jquery.flot.resize.js"></script>' +
-					'<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>');*/
+		'<head><script type="text/javascript" src="app/components/jquery/dist/jquery.min.js"></script>' +
+		'<link rel="stylesheet" href="app/components/leaflet-dist/leaflet.css" />' +
+		'<script type="text/javascript" src="app/components/leaflet-dist/leaflet.js"></script>' +
+		'<link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />' +
+		'<script type="text/javascript" src="app/components/bootstrap/dist/js/bootstrap.min.js"></script>' +
+		'<script type="text/javascript" src="js/func.js"></script>' +
+		'<script type="text/javascript" src="js/Leaflet.js"></script>');
 
 	console.log("Step 3: injecting script tags finished");
 

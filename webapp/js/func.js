@@ -23,6 +23,22 @@ $(document).ready(function() {
     JL().setOptions({"appenders": [consoleAppender]});
 
 
+    $.ajax({
+    url: location.origin + '/isLoggedIn',
+    type: 'GET',
+    success: function(content, textStatus) {
+      if (content) {
+        $('#newPubli').removeClass('disabled');
+        $('#loginButton').text('You are Logged In');
+        $('#loginButton').prop('title', 'Logout');
+      } else {
+        $('#newPubli').addClass('disabled');
+        $('#newPubli').prop('title', 'Login to upload a paper');
+      }
+    }
+  });
+
+
 
     $.ajax({
         type: 'GET',
@@ -129,3 +145,23 @@ function loadPublication(element){
 
 
 
+/**
+ *   @desc checks whether there is a logged in user and starts log-out or logg-in procedure
+ */
+function loginOrLogout() {
+  $.ajax({
+    url: location.origin + '/isLoggedIn',
+    type: 'GET',
+    success: function(content, textStatus) {
+      if (content) {
+        $('#newPubli').addClass('disabled');
+        $('#loginButton').text('You are Logged In');
+        $('#loginButton').prop('title', 'Login with Github');
+        window.location.replace(location.origin + '/logout');
+      } else {
+        window.location.replace(location.origin + '/auth/github'); // redirecting to log in
+        $('#newPubli').removeClass('disabled');
+      }
+    }
+  });
+}
