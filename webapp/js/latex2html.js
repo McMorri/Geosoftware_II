@@ -85,10 +85,14 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
         console.log(IAEs[i][2]);
 
         // generate the visualisation HTML tags which will replace the tag
-        if (type == 'map') 
+        if (type == 'map') {
 			visualisationDiv = generateMap(dataset);
-        else if (type == 'timeseries')
-			visualisationDiv = '<div id="timeseries' + i + '" class="timeseries" data-file="' + paperID + '/' + dataset + '"></div>';
+        } else if (type == 'timeseries') {
+			visualisationDiv = '<div id="timeseries' + i + '" class="timeseries" data-file="' 
+							+ paperID + '/' + dataset + '"></div>';
+			visualisationDiv = visualisationDiv.replace('.Rdata', '.csv');
+			visualisationDiv = visualisationDiv.replace('.rdata', '.csv');
+		}
 		
         // replace each tag with actual visualisation html code
 		IAEs[i][1] = visualisationDiv;
@@ -102,9 +106,9 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
 	newHtml = newHtml.replace('<head>',
 		'<head><script type="text/javascript" src="/app/components/jquery/dist/jquery.min.js"></script>' +
 		'<link rel="stylesheet" href="/app/components/leaflet-dist/leaflet.css" />' +
-		'<link rel="stylesheet" href="/app/components/c3-0.4.10/c3.css" />' +
-		'<script type="text/javascript" src="/app/components/d3-master/d3.min.js"></script>' +
-		'<script type="text/javascript" src="/app/components/c3-0.4.10/c3.min.js"></script>' +
+		'<link rel="stylesheet" href="/app/components/c3/c3.css" />' +
+		'<script type="text/javascript" src="/app/components/d3/d3.min.js"></script>' +
+		'<script type="text/javascript" src="/app/components/c3/c3.min.js"></script>' +
 		'<script type="text/javascript" src="/app/components/leaflet-dist/leaflet.js"></script>' +
 		'<script type="text/javascript" src="/js/timeseries.js"></script>' +
 		'<script type="text/javascript" src="/js/Leaflet.js"></script>');
