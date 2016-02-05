@@ -155,7 +155,7 @@ app.post("/savepub", uploadNewPub, function(req,res){
 		// Rdata files aus der erstellten Liste konvertieren
 		async.apply(rdataconvert, rdataFiles),
 		// replacing tags in html
-		async.apply(latexConverter.replaceTags,pubPath + 'paper.html'),
+		async.apply(latexConverter.replaceTags,pubPath + 'paper.html', temppub._id),
 		// create zip archive of paper
 		async.apply(zipPub, temppub._id),
 		// DB eintrag speichern

@@ -19,12 +19,16 @@
     <script type="text/javascript" src="app/components/leaflet-dist/leaflet.js"></script>
     <script type="text/javascript" src="app/components/leaflet-draw/dist/leaflet.draw.js"></script>
     <script type="text/javascript" src="app/components/jsnlog.js/jsnlog.min.js"></script>
+	<script type="text/javascript" src="app/components/d3-master/d3.min.js"></script>
+	<script type="text/javascript" src="app/components/c3-0.4.10/c3.min.js"></script>
     <script type="text/javascript" src="js/func.js"></script> 
-    <script type="text/javascript" src="js/Leaflet.js"></script> 
+    <script type="text/javascript" src="js/Leaflet.js"></script>
+	<script type="text/javascript" src="js/timeseries.js"></script> 
 
     <link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="app/components/leaflet-dist/leaflet.css" />
     <link rel="stylesheet" href="app/components/leaflet-draw/dist/leaflet.draw.css" />
+	<link rel="stylesheet" href="app/components/c3-0.4.10/c3.css" />
 
     <intercept-url pattern="/favicon.ico" access="ROLE_ANONYMOUS" />
 
@@ -114,6 +118,15 @@
 		    </div>
 		</div>
 
+		<!-- Testarea für geplottete Timeseries -->		
+		<div class="row">
+		<div class="col-md-12">
+		<div id="chart">
+		<button class="btn-primary" type="button" onclick="plotTimeseries()">Plot-Test</button>
+		<br>
+		</div>
+		</div>
+		</div>
 
 		<div class="row">
       	<!-- Vorschau des Papers -->
