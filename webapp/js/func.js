@@ -101,12 +101,12 @@ window.onHashChange=function(){
 }
 
 
-// accapts a button from the right sidebar or a string containing th ID
+// accepts a button from the right sidebar or a string containing the ID
 function loadPublication(element){
 
     var pubID;
     if (typeof element == "string") {
-        pubID = element;
+        pubID = element.slice(1);
     } else {
         // ITS A BUTTON!
         pubID = $(element).data('index');
