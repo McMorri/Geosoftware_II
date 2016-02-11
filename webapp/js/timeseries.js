@@ -8,7 +8,7 @@
 "use strict";
 
 /**
-* @desc	  function that plots the timeseries data
+* @desc   function that plots the timeseries data
 */
 function plotTimeseries(htmlElement, filepath){
 var chart = c3.generate({
@@ -16,15 +16,15 @@ var chart = c3.generate({
     data: {
         url: filepath,
         type: 'line',
-	x: 'Index'
+        x: 'Index'
     }
 });
 };
 
-/**
-* @desc	 initialize timeseries after document is loaded
-*/
 
+/**
+* @desc  initialize timeseries after document is loaded
+*/
 $(document).ready(function() {
 
     $('.timeseries').each(function(i) {

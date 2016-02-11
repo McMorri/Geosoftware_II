@@ -1,5 +1,5 @@
 /**
-*   @author     Moritz Migge, Timon Gottschlich, Marvin Gehrt, Tobias Steinblum, Daniel Schäperklaus
+*   @author     Moritz Migge, Timon Gottschlich, Marvin Gehrt, Tobias Steinblum
 *   @version    1.0 
 */
 
@@ -42,7 +42,6 @@ $(document).ready(function() {
 
     $.ajax({
         type: 'GET',
-        //dataType: 'txt',
         url: 'http://' + window.location.host + '/getpub',
         timeout: 5000,
         success: function(content, textStatus ){
@@ -82,7 +81,6 @@ $(document).ready(function() {
                + content.pubname + " : " + content.authorname + " : " + content.releasedate +'</button> <br></td></tr>');
             $("#selectedpubname").text(content.pubname);
             console.log('publication saved to db!');
-            //selectedPaperID = content._id;
             window.location.hash = '#close';
             window.location.hash = '#' + content._id;
         }
@@ -118,17 +116,13 @@ function loadPublication(element){
 
     $.ajax({
         type: 'GET',
-        //dataType: 'txt',
         url: 'http://' + window.location.host + '/getselectedpub/' + pubID,
         timeout: 5000,
         success: function(content, textStatus ){
 
             $("#selectedpubname").text(content.pubname);
-            //$("#pubnameid").text("Inhalt der Datei");
-
             window.location.hash = '#' + content._id;
             console.log(content._id);
-
             selectedPaperID = content._id;
             
             // iframe src attribut ändern zu /getpublicationHTML/<id>

@@ -53,7 +53,7 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
 	console.log("replaceTags starting fine");
 
     var htmlString = fse.readFileSync(filepath,'utf8');
-    var tagSchema = '!-IAE';
+    var tagSchema = '!-IAE'; //InteractiveElement
     var lines = htmlString.split('\n');
     var IAEs = []; // contains arrays of IAE arguments in the form of !-IAE type=map dataset=file.json !-IAE
 
