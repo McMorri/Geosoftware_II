@@ -16,7 +16,6 @@
     "express-session": "^1.13.0",
     "fs-extra": "^0.26.2",
     "gdal": "^0.8.0",
-    "js-logger": "^1.2.0",
     "mongo": "^0.1.0",
     "mongoose": "^4.2.9",
     "mongoose-geojson-schema": "0.0.2",

@@ -23,7 +23,8 @@
     "bootstrap": "~3.3.6",
     "leaflet": "~0.7.7",
     "leaflet-draw": "leaflet.draw#~0.2.4",
-    "jsnlog.js": "jsnlog#~2.15.0",
-    "c3": "~0.4.10"
+    "c3": "~0.4.10",
+    "d3": "~3.5.15",
+    "toastr": "~2.1.1"
   }
 }

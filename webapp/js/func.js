@@ -10,6 +10,15 @@ var publicationArray = [];
 
 $(document).ready(function() {
 
+    toastr.options = {
+    "closeButton": true,
+    "showMethod": 'slideDown',
+    "timeOut": 10000,
+    "positionClass": 'toast-top-center'
+    }
+    toastr.info('Welcome to PaperBulb! PaperBulb is a platform to upload and view interactive scientific publications. To upload a publication please Login via Github in the Options menu. Have fun!')
+
+
     // get pubID from url hash
     selectedPaperID = window.location.hash.slice(1);
     if (selectedPaperID) {
@@ -30,6 +39,7 @@ $(document).ready(function() {
       if (content) {
         $('#newPubli').removeClass('disabled');
         $('#loginButton').text('You are logged in!');
+        toastr.success('Login successful!')
         }
     }
     });
@@ -49,19 +59,19 @@ $(document).ready(function() {
                 }
 
                 if (!selectedPaperID) {
-                    console.error('No specific publication loaded');
+                    console.log('no specific publication loaded');
                 } else {
                     loadPublication(selectedPaperID);
-                    console.log('Specific publication loaded');
+                    toastr.success('Specific publication loaded')
                 }
 
             } else {
-                console.error('No publications saved');
+                toastr.info('No publications saved');
             }
 
         },
         error: function(xhr, textStatus, errorThrown){
-            console.error('publication couldnt be loaded :^(');
+            toastr.error('publication couldnt be loaded :^(')
         }
     });
 
@@ -69,14 +79,14 @@ $(document).ready(function() {
         clearForm: true,
         dataType: 'json',
         type: 'POST',
-        error: function(err) { console.error('couldnt add a new publication: ' + err) },
+        error: function(err) { toastr.error('couldnt add a new publication: ' + err) },
         success: function(content) {
 
             // add button to right sidebar
             $("#publicationlist").prepend('<tr><td><button data-index="' + content._id + '" onclick="loadPublication(this)" class="btn btn-default">'
                + content.pubname + " : " + content.authorname + " : " + content.releasedate +'</button> <br></td></tr>');
             $("#selectedpubname").text(content.pubname);
-            console.log('publication saved to db!');
+            toastr.success('Publication saved to db!')
             window.location.hash = '#close';
             window.location.hash = '#' + content._id;
         }
@@ -87,6 +97,7 @@ $(document).ready(function() {
 function downloadPaper() {
     var url= 'http://' + window.location.host + '/download/';
     window.open(url + selectedPaperID);
+    toastr.success('Download successful!')
 }
 
 window.onHashChange=function(){
@@ -94,6 +105,21 @@ window.onHashChange=function(){
     loadPublication(hash);
 }
 
+function helpLogin() {
+    toastr.info('Click here to Login via Github to upload a publication to this platform.')
+}
+
+function helpDownload() {
+    toastr.info('Click here to download the selected publication as a zipped file.')
+}
+
+function helpNewPub() {
+    toastr.info('Click here to publish your publication after login.')
+}
+
+function helpList() {
+    toastr.info('This is the list of all publications published to this platform. Click on one to display it.')
+}
 
 // accepts a button from the right sidebar or a string containing the ID
 function loadPublication(element){
@@ -108,7 +134,7 @@ function loadPublication(element){
 
     var hashExceptions = ['newPubModal', 'close', '']
     if (hashExceptions.indexOf(pubID) !== -1) 
-        return console.error('no publication selected');
+        return toastr.error('no publication selected')
 
     $.ajax({
         type: 'GET',
@@ -118,7 +144,7 @@ function loadPublication(element){
 
             $("#selectedpubname").text(content.pubname);
             window.location.hash = '#' + content._id;
-            console.log(content._id);
+            toastr.info(content._id + 'selected')
             selectedPaperID = content._id;
             
             // iframe src attribut ändern zu /getpublicationHTML/<id>
@@ -126,7 +152,7 @@ function loadPublication(element){
             
         },
         error: function(xhr, textStatus, errorThrown){
-            console.error('publication couldnt be selected :^(');
+            toastr.error('publication couldnt be selected :^(')
         }
     });
 

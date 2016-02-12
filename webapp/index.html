@@ -19,13 +19,16 @@
     <script type="text/javascript" src="app/components/leaflet-dist/leaflet.js"></script>
     <script type="text/javascript" src="app/components/leaflet-draw/dist/leaflet.draw.js"></script>
     <script type="text/javascript" src="app/components/jsnlog.js/jsnlog.min.js"></script>
+    <script type="text/javascript" src="app/components/toastr/toastr.js"></script>   
     <script type="text/javascript" src="js/func.js"></script> 
     <script type="text/javascript" src="js/Leaflet.js"></script>
 	<script type="text/javascript" src="js/timeseries.js"></script> 
-
+	
+	<link rel="stylesheet" href="app/components/toastr/toastr.css" />
     <link rel="stylesheet" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="app/components/leaflet-dist/leaflet.css" />
     <link rel="stylesheet" href="app/components/leaflet-draw/dist/leaflet.draw.css" />
+    
 
     <intercept-url pattern="/favicon.ico" access="ROLE_ANONYMOUS" />
 
@@ -59,11 +62,17 @@
 							<li id="option" class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="/auth/github" id="loginButton">Github-Login</a></li>
+									<li><a href="/auth/github" id="loginButton">Github-Login</a>
+										<a class="glyphicon glyphicon-info-sign" onclick="helpLogin()"></a>
+									</li>
 									<li role="seperator" class="divider"></li>
-									<li><a href="#" onclick="downloadPaper()">Download</a></li>
+									<li><a href="#" onclick="downloadPaper()">Download</a>
+										<a class="glyphicon glyphicon-info-sign" onclick="helpDownload()"></a>
+									</li>
 									<li role="separator"  class="divider"></li>
-									<li><a href="#newPubModal" class="disabled" id="newPubli">New Publication</a></li>
+									<li><a href="#newPubModal" class="disabled" id="newPubli">New Publication</a>
+										<a class="glyphicon glyphicon-info-sign" onclick="helpNewPub()"></a>
+									</li>
 								</ul>
 							</li>
 
@@ -126,7 +135,7 @@
 
 	    	<!-- list of all publications -->
 	    	<div class="col-md-4">
-	    		<p>Paper-List:</p>
+	    		<p>Paper-List:  <a class="glyphicon glyphicon-info-sign" onclick="helpList()"></a></p>
 	    		<ul id="publicationlist"></ul>
 	    	</div>
     	</div>
