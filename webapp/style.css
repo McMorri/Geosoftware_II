@@ -1,12 +1,12 @@
 
 
 body,html, #impressum {
-	height: 100%; 
-	margin: 1%;
+    height: 100%; 
+    margin: 1%;
 }
 
 #publication {
-	margin-left: 5%;
+    margin-left: 5%;
 }
 
 /** Modal**/
@@ -43,4 +43,9 @@ body,html, #impressum {
 
 .modalDialog > div > h4 {
     margin-top: 10px;
+}
+
+a.disabled {
+   pointer-events: none;
+   cursor: default;
 }
