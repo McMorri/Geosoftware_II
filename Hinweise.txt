@@ -1,0 +1,21 @@
+Das Paket async muss von npm installiert werden (in Package-Datei schreiben), damit das Conversions.js-Skript läuft.
+Async lässt Javaskript-Funktionen in Reihe abarbeiten. Dies ist nötig, da Convertions.js mit zwei einzelnen, in Reihe geschalteten Funktionen arbeitet.
+
+Es wird ein Python-Skript gdal2tiles.py mitgeliefert. Python müsste in Ubuntu schon mitgeliefert sein.
+
+Es muss gdal installiert sein, diesmal nicht von npm, sondern auf dem Server selbst. Die Aufgerufene Funktion gdalwarp ist in diesem Paket enthalten.
+
+
+WICHTIG!
+   Convertions.js arbeitet mit Kommandozeilenbefehlen (Variablen cmd und cmd2).
+Derzeit sind sie für Mac funktionierend konstruiert und müssten für Ubuntu entsprechend umgebaut werden.
+Habe aber selbst keine Möglichkeit das zu machen und zu testen. Müsste einer von euch erledigen,
+dürfte aber vermutlich kein großes Problem sein. Die Bestandteile der Befehle habe ich im Skript
+detailliert erklärt.
+   Die erste Funktion in Convertions.js legt ein neues Tiff (temp.tif) an, welches die zweite Funktion als Eingabe nimmt.
+Dieses wäre eventuell anschließend wieder zu löschen, aber wird andererseits bei jedem neuen Funktionsaufruf
+eh wieder angelegt.
+
+
+
+
