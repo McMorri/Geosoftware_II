@@ -144,7 +144,7 @@ function loadPublication(element){
 
             $("#selectedpubname").text(content.pubname);
             window.location.hash = '#' + content._id;
-            toastr.info(content._id + 'selected')
+            toastr.info(content.pubname + ' selected')
             selectedPaperID = content._id;
             
             // iframe src attribut ändern zu /getpublicationHTML/<id>
