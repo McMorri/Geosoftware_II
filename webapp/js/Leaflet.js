@@ -8,20 +8,14 @@
 "use strict";
 
 
-
-var map;
-var layerController;
-
-
-
-
 /**
  * @desc Einladen verschiedener Basemaps für Leaflet, zwischen
 *        denen der Nutzer wechseln kann.
  */
-function loadMap(){
+function loadMap(htmlElement){
   //Basiseinstellungen für die Karte.
-  map = L.map("leafletBox").setView([0.000000, 0.000000], 1);   //setView(Koordinaten, zoomstufe)
+  var map = L.map(htmlElement).setView([0.000000, 0.000000], 1);   //setView(Koordinaten, zoomstufe)
+  var layerController;
 
   //Verschiedene Basemaps hinzufügen.
   //Eine Karte mit Regionen und Staatsgrenzen.
@@ -77,6 +71,8 @@ function loadMap(){
   var mapFeatures = new L.FeatureGroup();
   map.addLayer(mapFeatures);
 
+  return map;
+
 };  //Funktion loadMap beenden.
 
 
@@ -99,9 +95,7 @@ function addDataToMap(data, map) {
 /**
  * @desc Den GeoJSON-Inhalt eines Papers auf der Karte darstellen.
  */
- function showJson(content){    //Variable content folgt dem Aufbau 'pfad/zur/datei.json'.
-   //Einladen der Karten.
-   loadMap();
+ function showJson(map, content){    //Variable content folgt dem Aufbau 'pfad/zur/datei.json'.
    //Den Inhalt der gegebenen json-Datei einlesen und in Leaflet darstellen.
    $.getJSON(content , function(data) { addDataToMap(data, map); });
  };
@@ -115,18 +109,15 @@ function addDataToMap(data, map) {
 /**
  * @desc Zeigt den Inhalt des GeoTIFF in Leaflet.
  */
-function showTiff(file, title){    //Variable file folgt dem Aufbau 'pfad/zum/dateinamen/{z}/{x}/{y}.jpg'.
+function showTiff(map, file, title){    //Variable file folgt dem Aufbau 'pfad/zum/dateinamen/{z}/{x}/{y}.jpg'.
                                    //Die Endung '/{z}/{x}/{y}.jpg' ist wichtig, denn sie verweist auf die Ordnerstruktur, die die Bild-Tiles enthält.
                                    //Variable title ist ein String. Er wird unten rechts im Leaflet-Fenster als kurze Beschreibung dargestellt. Optional
 
-   //Einladen der Karten.
-  loadMap();
 
   var TiffContent = file;
   var text = title;
 
   //Füge das gewünschte Tiff in einem Tilelayer dem Leaflet-Fenster hinzu.
-  var map = L.map('leafletBox').setView([0, 0], 2);
     L.tileLayer(TiffContent, {
       minZoom: 0,
       maxZoom: 15,
@@ -134,3 +125,15 @@ function showTiff(file, title){    //Variable file folgt dem Aufbau 'pfad/zum/da
       tms: true
     }).addTo(map);
 };
+
+// wenn dokument fertig geladen ist
+$(document).ready(function() {
+  // initialisiere eine leaflet map auf jedem element mit der klasse map
+  $('.map').each(function(i, asdf) {
+    var dataset = $(this).data('tiles');
+    var map = loadMap($(this).attr('id'));
+
+    // lade ein tif // aka tilelayer in die map
+    showTiff(map, dataset + '/{z}/{x}/{y}.png', 'deine mama');
+  });
+});

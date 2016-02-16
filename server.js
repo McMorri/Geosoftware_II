@@ -16,6 +16,7 @@ var multer 	   		= require('multer');
 var zipZipTop  		= require('zip-zip-top');
 var child_process 	= require('child_process');
 var latexConverter  = require('./webapp/js/latex2html.js');
+var tifConverter    = require('./Convertions.js');
 
 var app = express();
 var upload = multer({ dest: __dirname + '/uploads/' });
@@ -113,6 +114,7 @@ app.post("/savepub", uploadNewPub, function(req,res){
 	var texFile = req.files['mainlatex'][0];
 	var otherFiles = req.files['others'];
 	var rdataFiles = []; // paths to all uploaded rdata files
+	var tifFiles = []; // paths to all uploaded tif files
 	
 	// append texFile to otherFiles array, so we have all files in one array
 	otherFiles.push(texFile);
@@ -132,6 +134,8 @@ app.post("/savepub", uploadNewPub, function(req,res){
 	    var extension = fileName.split('.').pop();
 	    if (extension.toLowerCase() == 'rdata')
 	    	rdataFiles.push(pubPath + fileName);
+	    if (extension.toLowerCase() == 'tif' || extension.toLowerCase() == 'tiff')
+	    	tifFiles.push(pubPath + fileName);
 	}
 
 	function moveFiles(files, pubID, callback) {
@@ -151,8 +155,10 @@ app.post("/savepub", uploadNewPub, function(req,res){
 		async.apply(latexConverter.convert, pubPath, texFile.originalname),
 		// convert Rdata files from the generated list
 		async.apply(rdataconvert, rdataFiles),
+		// convert tifs to jpeg
+		async.apply(tifConverter, tifFiles),
 		// replacing tags in html
-		async.apply(latexConverter.replaceTags,pubPath + 'paper.html', temppub._id),
+		async.apply(latexConverter.replaceTags, pubPath + 'paper.html', temppub._id),
 		// create zip archive of paper
 		async.apply(zipPub, temppub._id),
 		// save database entry
