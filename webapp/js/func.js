@@ -38,6 +38,7 @@ $(document).ready(function() {
     success: function(content, textStatus) {
       if (content) {
         $('#newPubli').removeClass('disabled');
+        $('#loginButton').addClass('disabled');
         $('#loginButton').text('You are logged in!');
         toastr.success('Login successful!')
         }
