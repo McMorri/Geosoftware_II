@@ -57,7 +57,6 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
     var lines = htmlString.split('\n');
     var IAEs = []; // contains arrays of IAE arguments in the form of !-IAE type=map dataset=file.json !-IAE
 
-    console.log(lines.length);
 
     // find each marker
     for (var i = 0; i < lines.length; i++) {
@@ -65,7 +64,6 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
         IAEs[i] = lines[i].split(tagSchema);
     }
 
-    console.log(IAEs.length) + "test ";
 
     // parse each marker & call conversion
     for (var i = 0; i < IAEs.length; i++) {
@@ -86,7 +84,7 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
 
         // generate the visualisation HTML tags which will replace the tag
         if (type == 'map') {
-			visualisationDiv = '<div id="map' + i + '" class="map" data-tiles="' 
+			visualisationDiv = '<div style="height:420px" id="map' + i + '" class="map" data-tiles="' 
 							+ paperID + '/' + dataset + '-tiles"></div>';
         } else if (type == 'timeseries') {
 			visualisationDiv = '<div id="timeseries' + i + '" class="timeseries" data-file="' 

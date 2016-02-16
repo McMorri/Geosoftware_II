@@ -17,6 +17,10 @@ var chart = c3.generate({
         url: filepath,
         type: 'line',
 	    x: 'Index'
+    },
+    // enable zoom
+    zoom: {
+        enabled: true
     }
 });
 };

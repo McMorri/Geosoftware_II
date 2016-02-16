@@ -15,7 +15,7 @@ var gdal 			= require('gdal');
 var multer 	   		= require('multer');
 var zipZipTop  		= require('zip-zip-top');
 var child_process 	= require('child_process');
-var latexConverter  = require('./webapp/js/latex2html.js');
+var latexConverter  = require('./latex2html.js');
 var tifConverter    = require('./Convertions.js');
 
 var app = express();
@@ -93,7 +93,6 @@ app.get("/getpub", function (req,res){
 		}
 
 		return res.send(feature);
-		res.sendFile(/*dateipfad*/);
 	});
 });
 
@@ -147,7 +146,7 @@ app.post("/savepub", uploadNewPub, function(req,res){
 			);
 		}, callback);
 	}
-
+// './tifpath'),
 	async.series([
 		// move all files (otherfiles + texfile) to data folder
 		async.apply(moveFiles, otherFiles, temppub._id),
@@ -195,15 +194,7 @@ app.get("/getselectedpub/:id", function (req,res){
 	});	
 });
 
-/**
- * return  the converted paper
-  
- app.get('/getpublicationHTML/:id', function(req, res) {
- 	var id = req.params.id;
- 	res.sendFile(__dirname + '/data/' + id + '/paper.html');
- 
-  
- });*/
+
 
 
 
