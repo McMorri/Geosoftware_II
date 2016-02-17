@@ -47,7 +47,7 @@ function loadMap(htmlElement){
   Esri_NatGeoWorldMap.addTo(map);
 
 
-//Variable baseMaps enthält alle zuvor definierten Basemaps für Leaflet.
+  //Variable baseMaps enthält alle zuvor definierten Basemaps für Leaflet.
   var baseMaps = {
     "OpenStreetMap_Mapnik" : OpenStreetMap_Mapnik,
     "Esri_WorldTopoMap" : Esri_WorldTopoMap,
@@ -56,23 +56,11 @@ function loadMap(htmlElement){
     "Esri_NatGeoWorldMap" : Esri_NatGeoWorldMap
   };
 
-
-  // GeoJSON-Object-Layer hinzufügen.
-  var JsonLayer = L.geoJson().addTo(map);
-
-
-
   //Alle zuvor definierten Layer zum Layercontroller hinzufügen, damit der
   //der Nutzer zwischen ihnen wechseln kann.
   layerController = L.control.layers(baseMaps).addTo(map);
 
-
-  //Layer für die Darstellung des Inhaltes von Papern hinzufügen.
-  var mapFeatures = new L.FeatureGroup();
-  map.addLayer(mapFeatures);
-
   return map;
-
 };  //Funktion loadMap beenden.
 
 
@@ -85,6 +73,7 @@ function loadMap(htmlElement){
 function addDataToMap(data, map) {
     var dataLayer = L.geoJson(data);
     dataLayer.addTo(map);
+    map.fitBounds(dataLayer.getBounds());
 }
 
 
@@ -95,9 +84,9 @@ function addDataToMap(data, map) {
 /**
  * @desc Den GeoJSON-Inhalt eines Papers auf der Karte darstellen.
  */
- function showJson(map, content){    //Variable content folgt dem Aufbau 'pfad/zur/datei.json'.
+ function showJson(map, url){    //Variable url folgt dem Aufbau 'pfad/zur/datei.json'.
    //Den Inhalt der gegebenen json-Datei einlesen und in Leaflet darstellen.
-   $.getJSON(content , function(data) { addDataToMap(data, map); });
+   $.getJSON(url , function(data) { addDataToMap(data, map); });
  };
 
 
@@ -111,9 +100,7 @@ function addDataToMap(data, map) {
  */
 function showTiff(map, file, title){    //Variable file folgt dem Aufbau 'pfad/zum/dateinamen/{z}/{x}/{y}.jpg'.
                                    //Die Endung '/{z}/{x}/{y}.jpg' ist wichtig, denn sie verweist auf die Ordnerstruktur, die die Bild-Tiles enthält.
-                                   //Variable title ist ein String. Er wird unten rechts im Leaflet-Fenster als kurze Beschreibung dargestellt. Optional
-
-
+                                   //Variable title ist ein String. Er wird unten rechts im Leaflet-Fenster als kurze Beschreibung dargestellt. Optionals
   var TiffContent = file;
   var text = title;
 
@@ -130,10 +117,15 @@ function showTiff(map, file, title){    //Variable file folgt dem Aufbau 'pfad/z
 $(document).ready(function() {
   // initialisiere eine leaflet map auf jedem element mit der klasse map
   $('.map').each(function(i, asdf) {
-    var dataset = $(this).data('tiles');
+    var tiles = $(this).data('tiles');
+    var json = $(this).data('json');
     var map = loadMap($(this).attr('id'));
 
+    if (tiles != '') 
+      showTiff(map, '/publications/' + tiles + '/{z}/{x}/{y}.png', '');
+    if (json != '') 
+      showJson(map, '/publications/' + json);
+
     // lade ein tif // aka tilelayer in die map
-    showTiff(map, dataset + '/{z}/{x}/{y}.png', 'deine mama');
   });
 });
