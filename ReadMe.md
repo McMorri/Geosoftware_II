@@ -12,7 +12,7 @@ If you want to Install PaperBulb follow our detailed Installation Guide. You can
 
 ### How to use PaperBulb
 
-For information on how to use PaperBulb read our document ["How to use PaperBulb"](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/docs/HowToPaperBulb)
+For information on how to use PaperBulb read our document ["How to use PaperBulb"](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/docs/HowToPaperBulb.md)
 
 ### Version
 
