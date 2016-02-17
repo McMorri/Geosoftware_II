@@ -32,7 +32,7 @@ PaperBulb supports numerous different file formats for interactive elements with
     * timeseries
     * map
 - **dataset**: name of the file that will be shown at the position of this tag. Possible file formats are:
-    * rdata (xts objects)
+    * rdata (zoo and sp objects)
     * JSON
     * TIFF
     * GeoTIFF
