@@ -1,4 +1,4 @@
-# PaperBulb
+![screenshot](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/img/logo_momi.png)
 
 PaperBulb is a web based publication platform, which enables researchers and developers to show their research findings to the world. 
 
