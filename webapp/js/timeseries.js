@@ -11,15 +11,23 @@
 * @desc	  function that plots the timeseries data
 */
 function plotTimeseries(htmlElement, filepath){
+//generate the chart
 var chart = c3.generate({
+    //show chart at the correct position within the generated html
     bindto: htmlElement,
+    //load data from converted .csv file
     data: {
         url: filepath,
         type: 'line',
 	    x: 'Index'
     },
-    // enable zoom
+    //enable zoom and rescale of the y axis
     zoom: {
+        enabled: true,
+        rescale: true
+    },
+    //enable pan
+    pan: {
         enabled: true
     }
 });

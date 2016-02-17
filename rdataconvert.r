@@ -1,6 +1,7 @@
 library(zoo)
 library(xts)
 library(sp)
+library(rgdal)
 library(R.utils)
 
 #returns object from rdata file
@@ -27,10 +28,10 @@ if("ts" %in% classes){
 		write.zoo(object, file=outputPath, sep=",",row.names=FALSE)
 	}
 }else{
-	#todo sp conversion
+	# convert sp object to geoJSON
+	filename <- paste(c(inputPath, ".json"), collapse="")
+	writeOGR(object, filename, layer = "geojson", driver = "GeoJSON")
 } 
-
-
 
 
 

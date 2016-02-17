@@ -50,7 +50,7 @@ module.exports.convert = function(inputdir, input, callback) {
 
 module.exports.replaceTags = function(filepath, paperID, callback) {
 
-	console.log("replaceTags starting fine");
+	console.log("Step 3: replaceTags starting");
 
     var htmlString = fse.readFileSync(filepath,'utf8');
     var tagSchema = '!-IAE'; //InteractiveElement
@@ -78,17 +78,26 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
         var dataset = tag[2].split('=')[1];
         var visualisationDiv = '';
 
-        console.log(IAEs[i][0]);
-        console.log(IAEs[i][1]);
-        console.log(IAEs[i][2]);
-
         // generate the visualisation HTML tags which will replace the tag
         if (type == 'map') {
-			visualisationDiv = '<div style="height:420px" id="map' + i + '" class="map" data-tiles="' 
-							+ paperID + '/' + dataset + '-tiles"></div>';
+        	// map visualisation
+        	var fileExtension = dataset.split('.').pop().toLowerCase();
+        	if (fileExtension === 'json') {
+				visualisationDiv = '<div style="height:420px" id="map' + i + '" class="map" data-json="' 
+					+ paperID + '/' + dataset + '"></div>';
+        	} else if (fileExtension === 'rdata') {
+        		// rdata, previously converted to geojson
+ 				visualisationDiv = '<div style="height:420px" id="map' + i + '" class="map" data-json="' 
+					+ paperID + '/' + dataset + '.json"></div>';
+        	} else {
+        		// tiff
+				visualisationDiv = '<div style="height:420px" id="map' + i + '" class="map" data-tiles="' 
+					+ paperID + '/' + dataset + '-tiles"></div>';
+			}
         } else if (type == 'timeseries') {
+        	// timeseries visualisation
 			visualisationDiv = '<div id="timeseries' + i + '" class="timeseries" data-file="' 
-							+ paperID + '/' + dataset + '"></div>';
+				+ paperID + '/' + dataset + '"></div>';
 			visualisationDiv = visualisationDiv.replace('.Rdata', '.csv');
 			visualisationDiv = visualisationDiv.replace('.rdata', '.csv');
 		}
@@ -112,10 +121,10 @@ module.exports.replaceTags = function(filepath, paperID, callback) {
 		'<script type="text/javascript" src="/js/timeseries.js"></script>' +
 		'<script type="text/javascript" src="/js/Leaflet.js"></script>');
 
-	console.log("Step 3: injecting script tags finished");
+	console.log("Step 4: injecting script tags finished");
 
     // save to file
     fse.writeFileSync(filepath, newHtml);
-	console.log("Step 4: html modified");
+	console.log("Step 5: html modified");
     callback(null);
 }
