@@ -8,7 +8,7 @@ The developed software is designed to be run at Linux based Server only. While t
 
 ### How to install PaperBulb
 
-If you want to Install PaperBulb follow our detailed Installation Guide. You can find it here: [webapp/docs/Installation_Guide_v1.docx](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/docs/InstallationGuide.md)
+If you want to Install PaperBulb follow our detailed Installation Guide. You can find it here: [webapp/docs/InstallationGuide.md](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/docs/InstallationGuide.md)
 
 ### How to use PaperBulb
 
