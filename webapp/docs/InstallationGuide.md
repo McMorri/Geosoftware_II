@@ -61,12 +61,17 @@ The developed software is designed to be run on Linux based Servers only. While 
 
 9.	Install Bower 
 
-  The package manager can be installed by the following command
-  sudo npm install -g bower
+  The package manager can be installed by the following command:
+  
+      sudo npm install -g bower
 
-10.	To install the necessary dependencies run the following commands in the project directory
-    sudo npm install
-    sudo bower install
+10.	 
+
+  To install the necessary dependencies run the following commands in the project directory:
+  
+      sudo npm install
+
+      sudo bower install
 
 11.	YAY, you successfully installed all the necessary software. There are two steps left before you have a completely running publication platform.
 
