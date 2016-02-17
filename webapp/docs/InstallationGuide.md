@@ -43,8 +43,9 @@ sudo npm install
 sudo bower install
 
 8.	YAY, you successfully installed all the necessary software. There are two steps left before you have a completely running publication platform.
--	Start MongoDB
--	Start the server running the following command in main directory of the project 
+
+  +	Start MongoDB
+  +	Start the server running the following command in main directory of the project 
 node server.js 
 
 
