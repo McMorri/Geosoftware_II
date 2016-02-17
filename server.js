@@ -16,7 +16,7 @@ var multer 	   		= require('multer');
 var zipZipTop  		= require('zip-zip-top');
 var child_process 	= require('child_process');
 var latexConverter  = require('./latex2html.js');
-var tifConverter    = require('./Convertions.js');
+var tifConverter    = require('./Conversions.js');
 
 var app = express();
 var upload = multer({ dest: __dirname + '/uploads/' });
@@ -108,7 +108,7 @@ var uploadNewPub = upload.fields([
 
 // https://www.codementor.io/tips/9172397814/setup-file-uploading-in-an-express-js-application-using-multer-js
 app.post("/savepub", uploadNewPub, function(req,res){
-	console.log("save pub is starting fine");
+	console.log("Step 0: Save pub starting ");
 
 	var texFile = req.files['mainlatex'][0];
 	var otherFiles = req.files['others'];

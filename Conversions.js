@@ -5,7 +5,7 @@ function convert(input_path_to_tif, output_path_folder, callback) {   // input_p
     //Spawne chilsprocesse zur Konvertierung des Koordinatensystems
      //Spawne chilsprocesse zur Zerlegung des Tiffs in Tiles
   var cmd = 'gdalwarp ' + input_path_to_tif + ' temp.tif -t_srs "EPSG:3857"';   //gdalwarp [gdal-Funktion], temp.tif [Gespeicherte Ausgabedatei], -t_srs "EPSG:3857" [Zielreferenzsystem (Mercator)]
-  var cmd2 = 'gdal2tiles.py -p mercator -w none temp.tif ' + output_path_folder; //gdal2tiles.py [Externes Zerlegungsskript], -p mercator [Referenzsystem], 0-15 [gewünschte Zoomstufen], -w none [Webviewer, würde eine neue Datei zum Betrachten des Ergebnisses anlegen], temp.tif [Input (Outputdatei von warp)]
+  var cmd2 = 'gdal2tiles.py -p mercator -z 0-6 -w none temp.tif ' + output_path_folder; //gdal2tiles.py [Externes Zerlegungsskript], -p mercator [Referenzsystem], 0-15 [gewünschte Zoomstufen], -w none [Webviewer, würde eine neue Datei zum Betrachten des Ergebnisses anlegen], temp.tif [Input (Outputdatei von warp)]
 
   //Beginne Konvertierung
   async.series([
