@@ -3,7 +3,7 @@
 PaperBulb is a web based publication platform, which enables researches and developers to show their research findings to the world. 
 The following documents describes all at the platform available functionality. The different implemented functions are numbered for a better overview.
 
-![screenshot](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/docs/complete.png)
+![screenshot](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/img/complete.png)
 
 1.	Publication Text-Field
     
@@ -23,7 +23,7 @@ The following documents describes all at the platform available functionality. T
 
 5.	New Publication
 
-    ![screenshot](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/docs/new_pub.png)
+    ![screenshot](https://github.com/McMorri/Geosoftware_II/blob/master/webapp/img/new_pub.png)
     
     When a publisher has entered a “Publicationname” and a “Authorname” and has selected the main "TeX file” and the corresponding        “Other files” a publication can be uploaded. It might take a moment, be patient.
     (See Further Information for hints how to prepare a publication for the upload)
